@@ -28,10 +28,6 @@ export const defaultContentPageLayout: PageLayout = {
       component: Component.ContentMeta(),
       condition: (page) => page.fileData.slug !== "index",
     }),
-    Component.ConditionalRender({
-      component: Component.TagList(),
-      condition: (page) => page.fileData.slug !== "index",
-    }),
   ],
   left: [
     Component.Search(),
