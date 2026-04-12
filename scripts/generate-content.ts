@@ -188,9 +188,9 @@ ${introParagraphs}
 ${focusAreas}
         </div>
       </div>
-      <div class="home-actions" aria-label="Contact links">
+    </div>
+    <div class="home-actions" aria-label="Contact links">
 ${profileLinks}
-      </div>
     </div>
   </div>
 </section>

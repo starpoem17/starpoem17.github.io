@@ -86,9 +86,10 @@ body[data-slug="index"] .page article.home-page {
 
 .home-page .home-hero {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-columns: 208px minmax(0, 1fr);
   align-items: start;
-  column-gap: 32px;
+  column-gap: 24px;
+  row-gap: 0;
   width: 100%;
   margin-top: 0.5rem;
 }
@@ -96,13 +97,14 @@ body[data-slug="index"] .page article.home-page {
 .home-page .home-media {
   display: flex;
   justify-content: flex-start;
+  align-items: flex-start;
   padding-top: 0.12rem;
 }
 
 .home-page .profile-photo {
   display: block;
-  width: 10rem;
-  height: 10rem;
+  width: 12rem;
+  height: 12rem;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 50%;
@@ -196,14 +198,16 @@ body[data-slug="index"] .page article.home-page {
 }
 
 .home-page .home-actions {
+  grid-column: 1 / -1;
+  justify-self: center;
   display: grid;
   grid-template-columns: repeat(4, 124px);
   justify-content: center;
   align-items: center;
   column-gap: 12px;
   row-gap: 12px;
-  width: 100%;
-  margin: 24px auto 0;
+  width: max-content;
+  margin: 28px auto 0;
 }
 
 .home-page .home-action-btn {
@@ -335,8 +339,8 @@ body[data-slug="index"] .page article.home-page {
   }
 
   .home-page .profile-photo {
-    width: min(10rem, 100%);
-    height: auto;
+    width: 11rem;
+    height: 11rem;
   }
 
   .home-page .home-copy {

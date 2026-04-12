@@ -27,12 +27,12 @@ cssclasses:
           <span class="home-interest-pill">Embodied AI</span>
         </div>
       </div>
-      <div class="home-actions" aria-label="Contact links">
-        <a href="mailto:coolkhj2003@hanyang.ac.kr" class="home-action-btn">Email</a>
-        <a href="https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/" class="home-action-btn">LinkedIn</a>
-        <a href="https://github.com/starpoem17" class="home-action-btn">GitHub</a>
-        <a href="#" class="home-action-btn">CV</a>
-      </div>
+    </div>
+    <div class="home-actions" aria-label="Contact links">
+      <a href="mailto:coolkhj2003@hanyang.ac.kr" class="home-action-btn">Email</a>
+      <a href="https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/" class="home-action-btn">LinkedIn</a>
+      <a href="https://github.com/starpoem17" class="home-action-btn">GitHub</a>
+      <a href="#" class="home-action-btn">CV</a>
     </div>
   </div>
 </section>
