@@ -9,6 +9,7 @@ tags:
 topSection: 'RL'
 ---
 <div class="math-heading-block" data-heading-level="1"></div>
+
 $$
 V^{\pi}(s) = \mathbb E_{\pi} [R_{t+1} + \gamma V^{\pi}(S_{t+1}) \,|\, S_t = s]
 $$
@@ -61,6 +62,7 @@ $[0, 1]$ 범위
 
 # 더 풀어서 쓴 Bellman Equation
 <div class="math-heading-block" data-heading-level="1"></div>
+
 $$
 V^{\pi}(s) = \sum_{a}\pi(a|s) \sum_{s', r}p(s', r | s, a)[r + \gamma V^{\pi}(s')]
 $$

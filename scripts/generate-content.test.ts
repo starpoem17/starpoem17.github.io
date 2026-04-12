@@ -16,6 +16,7 @@ describe("normalizeBrokenMathHeadings", () => {
       normalized,
       [
         '<div class="math-heading-block" data-heading-level="1"></div>',
+        "",
         "$$",
         "V(s) = r + \\gamma V(s')",
         "$$",
@@ -31,10 +32,23 @@ describe("normalizeBrokenMathHeadings", () => {
       normalized,
       [
         '<div class="math-heading-block" data-heading-level="1"></div>',
+        "",
         "$$",
         "a + b",
         "$$",
       ].join("\n"),
+    )
+  })
+
+  test("rewrites standalone single-line block math into Quartz-compatible multiline block math", () => {
+    const normalized = normalizeBrokenMathHeadings(
+      "$$ V^{\\pi}(s) = \\mathbb E_{\\pi}[G_t] $$",
+      "obsidian/RL/test.md",
+    )
+
+    assert.strictEqual(
+      normalized,
+      ["$$", "V^{\\pi}(s) = \\mathbb E_{\\pi}[G_t]", "$$"].join("\n"),
     )
   })
 
@@ -64,6 +78,13 @@ describe("assertNoBrokenMathHeadings", () => {
   test("rejects leftover broken heading syntax", () => {
     assert.throws(
       () => assertNoBrokenMathHeadings(["### $$", "x", "$$"].join("\n"), "content/rl/test.md"),
+      /Unsupported math heading pattern remains/,
+    )
+  })
+
+  test("rejects leftover single-line block math syntax", () => {
+    assert.throws(
+      () => assertNoBrokenMathHeadings("$$ a+b $$", "content/rl/test.md"),
       /Unsupported math heading pattern remains/,
     )
   })

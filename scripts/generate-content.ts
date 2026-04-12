@@ -106,6 +106,7 @@ function stripLeadingFrontmatter(markdown: string): string {
 
 const BROKEN_MATH_HEADING_LINE = /^(#{1,6})\s+\$\$\s*$/
 const INLINE_BROKEN_MATH_HEADING_LINE = /^(#{1,6})\s+\$\$(.+)\$\$\s*$/
+const SINGLE_LINE_BLOCK_MATH = /^(\s*)\$\$\s*(.+?)\s*\$\$\s*$/
 const BLOCK_MATH_DELIMITER_LINE = /^\$\$\s*$/
 
 function buildMathHeadingHook(level: number): string {
@@ -118,6 +119,19 @@ export function normalizeBrokenMathHeadings(markdown: string, sourcePath: string
 
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index]
+
+    const singleLineMathMatch = line.match(SINGLE_LINE_BLOCK_MATH)
+    if (singleLineMathMatch && !line.match(INLINE_BROKEN_MATH_HEADING_LINE)) {
+      const indent = singleLineMathMatch[1] ?? ""
+      const expression = singleLineMathMatch[2]?.trim()
+      if (!expression) {
+        throw new Error(`Empty single-line block math in ${sourcePath} at line ${index + 1}`)
+      }
+
+      normalized.push(`${indent}$$`, `${indent}${expression}`, `${indent}$$`)
+      continue
+    }
+
     const inlineMatch = line.match(INLINE_BROKEN_MATH_HEADING_LINE)
     if (inlineMatch) {
       const level = inlineMatch[1]?.length ?? 1
@@ -126,7 +140,7 @@ export function normalizeBrokenMathHeadings(markdown: string, sourcePath: string
         throw new Error(`Empty inline math heading in ${sourcePath} at line ${index + 1}`)
       }
 
-      normalized.push(buildMathHeadingHook(level), "$$", expression, "$$")
+      normalized.push(buildMathHeadingHook(level), "", "$$", expression, "$$")
       continue
     }
 
@@ -154,7 +168,7 @@ export function normalizeBrokenMathHeadings(markdown: string, sourcePath: string
       throw new Error(`Unclosed math heading in ${sourcePath} starting at line ${index + 1}`)
     }
 
-    normalized.push(buildMathHeadingHook(level), "$$", ...mathLines, "$$")
+    normalized.push(buildMathHeadingHook(level), "", "$$", ...mathLines, "$$")
   }
 
   return normalized.join("\n")
@@ -163,7 +177,12 @@ export function normalizeBrokenMathHeadings(markdown: string, sourcePath: string
 export function assertNoBrokenMathHeadings(markdown: string, sourcePath: string): void {
   const brokenLine = markdown
     .split("\n")
-    .findIndex((line) => BROKEN_MATH_HEADING_LINE.test(line) || INLINE_BROKEN_MATH_HEADING_LINE.test(line))
+    .findIndex(
+      (line) =>
+        BROKEN_MATH_HEADING_LINE.test(line) ||
+        INLINE_BROKEN_MATH_HEADING_LINE.test(line) ||
+        SINGLE_LINE_BLOCK_MATH.test(line),
+    )
 
   if (brokenLine !== -1) {
     throw new Error(`Unsupported math heading pattern remains in ${sourcePath} at line ${brokenLine + 1}`)

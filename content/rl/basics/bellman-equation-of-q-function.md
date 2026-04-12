@@ -9,6 +9,7 @@ tags:
 topSection: 'RL'
 ---
 <div class="math-heading-block" data-heading-level="1"></div>
+
 $$
 Q^{\pi}(s,a) = \mathbb E_{\pi}[R_{t+1} + \gamma Q^{\pi}(S_{t+1}, A_{t+1})\,|\,S_t = s, A_t = a]
 $$

@@ -9,6 +9,7 @@ tags:
 topSection: 'RL'
 ---
 <div class="math-heading-block" data-heading-level="1"></div>
+
 $$
 \delta_t = R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)
 $$
