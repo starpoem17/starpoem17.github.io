@@ -31,6 +31,7 @@ cssclasses:
       <a href="mailto:coolkhj2003@hanyang.ac.kr" class="profile-link">Email</a>
       <a href="https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/" class="profile-link">LinkedIn</a>
       <a href="https://github.com/starpoem17" class="profile-link">GitHub</a>
+      <a href="#" class="profile-link">CV</a>
       </div>
     </div>
   </div>

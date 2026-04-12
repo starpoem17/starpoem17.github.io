@@ -13,7 +13,7 @@
 }
 
 .page article.home-page {
-  max-width: 52rem;
+  max-width: 55rem;
   font-size: 0.98rem;
 }
 
@@ -38,11 +38,11 @@
 }
 
 .about-me {
-  padding: 0.15rem 0 1.2rem;
+  padding: 0.4rem 0 1.2rem;
 }
 
 .about-me h1 {
-  margin: 0 0 1.55rem;
+  margin: 0 0 1.7rem;
   font-size: clamp(1.95rem, 3.4vw, 2.45rem);
   font-weight: 600;
   line-height: 1.08;
@@ -51,19 +51,21 @@
 
 .about-me__intro {
   display: grid;
-  grid-template-columns: 8.75rem minmax(0, 1fr);
-  gap: 1.45rem;
-  align-items: center;
+  grid-template-columns: 7.75rem minmax(0, 1fr);
+  gap: 1.15rem;
+  align-items: start;
+  margin-top: 0.3rem;
 }
 
 .about-me__media {
   display: flex;
   justify-content: flex-start;
+  margin-top: -0.18rem;
 }
 
 .profile-photo {
   display: block;
-  width: min(100%, 8.75rem);
+  width: min(100%, 7.75rem);
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 50%;
@@ -72,9 +74,9 @@
 
 .about-me__content {
   display: grid;
-  gap: 1.05rem;
-  align-content: center;
-  padding-top: 0.35rem;
+  gap: 1.15rem;
+  align-content: start;
+  padding-top: 0.52rem;
 }
 
 .about-me__content h2 {
@@ -99,6 +101,7 @@
   color: var(--darkgray);
   font-size: 0.97rem;
   line-height: 1.92;
+  max-width: 42rem;
 }
 
 .about-me__copy p {
@@ -141,23 +144,24 @@
 }
 
 .about-me__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.48rem;
-  margin-top: 0.32rem;
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  justify-content: center;
+  gap: 0.68rem;
+  margin-top: 0.5rem;
 }
 
 .profile-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  padding: 0.34rem 0.68rem;
+  min-width: 5.65rem;
+  padding: 0.44rem 0.92rem;
   border: 1px solid var(--lightgray);
   border-radius: 0.28rem;
   background: transparent;
   color: var(--dark);
-  font-size: 0.84rem;
+  font-size: 0.88rem;
   font-weight: 400;
   text-decoration: none;
   transition:
@@ -235,7 +239,7 @@
 
 @media (max-width: 1200px) {
   .page article.home-page {
-    max-width: 48rem;
+    max-width: 50rem;
   }
 
   .page article.section-page {
@@ -252,6 +256,7 @@
 
   .about-me__media {
     justify-content: flex-start;
+    margin-top: 0;
   }
 
   .profile-photo {
@@ -264,5 +269,10 @@
 
   .about-me__content {
     padding-top: 0;
+  }
+
+  .about-me__links {
+    grid-template-columns: repeat(2, max-content);
+    justify-content: flex-start;
   }
 }

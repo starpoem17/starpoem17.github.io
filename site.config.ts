@@ -22,12 +22,14 @@ export const PROFILE = {
   githubUrl: "https://github.com/starpoem17",
   linkedInUrl: "https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/",
   email: "coolkhj2003@hanyang.ac.kr",
+  cvUrl: "#",
 } as const
 
 export const PROFILE_LINKS = [
   { label: "Email", href: `mailto:${PROFILE.email}` },
   { label: "LinkedIn", href: PROFILE.linkedInUrl },
   { label: "GitHub", href: PROFILE.githubUrl },
+  { label: "CV", href: PROFILE.cvUrl },
 ] as const
 
 export const FOLDER_METADATA = [
