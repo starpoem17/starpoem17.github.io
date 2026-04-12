@@ -50,16 +50,52 @@ function compareStructuredSlugs(aSlug?: string, bSlug?: string): number {
   return compareText(aNormalized, bNormalized)
 }
 
-export const explorerFilterFn: ExplorerOptions["filterFn"] = (node) => {
-  const normalizedSlug = normalizeSlug(node.slug)
+// Explorer functions are serialized into the page and re-hydrated in the browser via `new Function`.
+// Keep them self-contained so they don't depend on module-scope helpers that won't exist at runtime.
+const explorerFilterFnSource = `(node) => {
+  const normalizedSlug = (node.slug ?? "").replace(/\\/index$/, "")
   if (normalizedSlug === "index") {
     return false
   }
 
   return node.slugSegment !== "tags"
-}
+}`
 
-export const explorerSortFn: ExplorerOptions["sortFn"] = (a, b) => {
+const explorerSortFnSource = `(a, b) => {
+  const folderOrder = ${JSON.stringify(FOLDER_ORDER)}
+  const noteOrder = ${JSON.stringify(NOTE_ORDER)}
+  const folderRanks = Object.fromEntries(folderOrder.map((slug, index) => [slug, index]))
+  const noteRanks = Object.fromEntries(noteOrder.map((slug, index) => [slug, index]))
+  const normalizeSlug = (slug) => (slug ?? "").replace(/\\/index$/, "")
+  const compareText = (left, right) =>
+    left.localeCompare(right, undefined, { numeric: true, sensitivity: "base" })
+  const pathDepth = (slug) => normalizeSlug(slug).split("/").filter(Boolean).length
+  const getRank = (slug) => {
+    const normalizedSlug = normalizeSlug(slug)
+    return (
+      noteRanks[normalizedSlug] ??
+      folderRanks[normalizedSlug] ??
+      Number.POSITIVE_INFINITY
+    )
+  }
+  const compareStructuredSlugs = (aSlug, bSlug) => {
+    const aNormalized = normalizeSlug(aSlug)
+    const bNormalized = normalizeSlug(bSlug)
+    const aRank = getRank(aNormalized)
+    const bRank = getRank(bNormalized)
+
+    if (aRank !== bRank && (Number.isFinite(aRank) || Number.isFinite(bRank))) {
+      return aRank - bRank
+    }
+
+    const depthDiff = pathDepth(aNormalized) - pathDepth(bNormalized)
+    if (depthDiff !== 0) {
+      return depthDiff
+    }
+
+    return compareText(aNormalized, bNormalized)
+  }
+
   if (a.isFolder !== b.isFolder) {
     return a.isFolder ? -1 : 1
   }
@@ -70,7 +106,15 @@ export const explorerSortFn: ExplorerOptions["sortFn"] = (a, b) => {
   }
 
   return compareText(a.displayName, b.displayName)
-}
+}`
+
+export const explorerFilterFn = new Function(
+  `return ${explorerFilterFnSource}`,
+)() as ExplorerOptions["filterFn"]
+
+export const explorerSortFn = new Function(
+  `return ${explorerSortFnSource}`,
+)() as ExplorerOptions["sortFn"]
 
 export const folderSortFn: SortFn = (a: QuartzPluginData, b: QuartzPluginData) => {
   const aIsFolder = isFolderSlug(a.slug)

@@ -26,6 +26,43 @@ function isMobileViewport(): boolean {
   return window.matchMedia(mobileMediaQuery).matches
 }
 
+function defaultExplorerFilter(node: FileTrieNode): boolean {
+  return node.slugSegment !== "tags"
+}
+
+function defaultExplorerSort(a: FileTrieNode, b: FileTrieNode): number {
+  if (a.isFolder !== b.isFolder) {
+    return a.isFolder ? -1 : 1
+  }
+
+  return a.displayName.localeCompare(b.displayName, undefined, {
+    numeric: true,
+    sensitivity: "base",
+  })
+}
+
+function parseExplorerFunction<T extends Function>(
+  source: string | undefined,
+  fallback: T,
+  label: string,
+): T {
+  if (!source) {
+    return fallback
+  }
+
+  try {
+    const parsed = new Function("return " + source)()
+    if (typeof parsed !== "function") {
+      throw new TypeError(`Parsed ${label} is not a function`)
+    }
+
+    return parsed as T
+  } catch (error) {
+    console.error(`[Explorer] Failed to restore ${label}. Falling back to default behavior.`, error)
+    return fallback
+  }
+}
+
 function setExplorerExpanded(explorer: HTMLElement, expanded: boolean) {
   explorer.classList.toggle("collapsed", !expanded)
   explorer.setAttribute("aria-expanded", expanded ? "true" : "false")
@@ -175,114 +212,131 @@ async function setupExplorer(currentSlug: FullSlug) {
   const allExplorers = document.querySelectorAll("div.explorer") as NodeListOf<HTMLElement>
 
   for (const explorer of allExplorers) {
-    const dataFns = JSON.parse(explorer.dataset.dataFns || "{}")
-    const opts: ParsedOptions = {
-      folderClickBehavior: (explorer.dataset.behavior || "collapse") as "collapse" | "link",
-      folderDefaultState: (explorer.dataset.collapsed || "collapsed") as "collapsed" | "open",
-      useSavedState: explorer.dataset.savestate === "true",
-      order: dataFns.order || ["filter", "map", "sort"],
-      sortFn: new Function("return " + (dataFns.sortFn || "undefined"))(),
-      filterFn: new Function("return " + (dataFns.filterFn || "undefined"))(),
-      mapFn: new Function("return " + (dataFns.mapFn || "undefined"))(),
-    }
-
-    // Get folder state from local storage
-    const storageTree = localStorage.getItem("fileTree")
-    const serializedExplorerState = storageTree && opts.useSavedState ? JSON.parse(storageTree) : []
-    const oldIndex = new Map<string, boolean>(
-      serializedExplorerState.map((entry: FolderState) => [entry.path, entry.collapsed]),
-    )
-
-    const data = await fetchData
-    const entries = [...Object.entries(data)] as [FullSlug, ContentDetails][]
-    const trie = FileTrieNode.fromEntries(entries)
-
-    // Apply functions in order
-    for (const fn of opts.order) {
-      switch (fn) {
-        case "filter":
-          if (opts.filterFn) trie.filter(opts.filterFn)
-          break
-        case "map":
-          if (opts.mapFn) trie.map(opts.mapFn)
-          break
-        case "sort":
-          if (opts.sortFn) trie.sort(opts.sortFn)
-          break
+    try {
+      const dataFns = JSON.parse(explorer.dataset.dataFns || "{}")
+      const opts: ParsedOptions = {
+        folderClickBehavior: (explorer.dataset.behavior || "collapse") as "collapse" | "link",
+        folderDefaultState: (explorer.dataset.collapsed || "collapsed") as "collapsed" | "open",
+        useSavedState: explorer.dataset.savestate === "true",
+        order: dataFns.order || ["filter", "map", "sort"],
+        sortFn: parseExplorerFunction(
+          dataFns.sortFn,
+          defaultExplorerSort,
+          "Explorer sortFn",
+        ) as ParsedOptions["sortFn"],
+        filterFn: parseExplorerFunction(
+          dataFns.filterFn,
+          defaultExplorerFilter,
+          "Explorer filterFn",
+        ) as ParsedOptions["filterFn"],
+        mapFn: parseExplorerFunction(
+          dataFns.mapFn,
+          (node: FileTrieNode) => node,
+          "Explorer mapFn",
+        ) as ParsedOptions["mapFn"],
       }
-    }
 
-    // Get folder paths for state management
-    const folderPaths = trie.getFolderPaths()
-    currentExplorerState = folderPaths.map((path) => {
-      const previousState = oldIndex.get(path)
-      return {
-        path,
-        collapsed:
-          previousState === undefined ? opts.folderDefaultState === "collapsed" : previousState,
+      // Get folder state from local storage
+      const storageTree = localStorage.getItem("fileTree")
+      const serializedExplorerState =
+        storageTree && opts.useSavedState ? JSON.parse(storageTree) : []
+      const oldIndex = new Map<string, boolean>(
+        serializedExplorerState.map((entry: FolderState) => [entry.path, entry.collapsed]),
+      )
+
+      const data = await fetchData
+      const entries = [...Object.entries(data)] as [FullSlug, ContentDetails][]
+      const trie = FileTrieNode.fromEntries(entries)
+
+      // Apply functions in order
+      for (const fn of opts.order) {
+        switch (fn) {
+          case "filter":
+            if (opts.filterFn) trie.filter(opts.filterFn)
+            break
+          case "map":
+            if (opts.mapFn) trie.map(opts.mapFn)
+            break
+          case "sort":
+            if (opts.sortFn) trie.sort(opts.sortFn)
+            break
+        }
       }
-    })
 
-    const explorerUl = explorer.querySelector(".explorer-ul")
-    if (!explorerUl) continue
+      // Get folder paths for state management
+      const folderPaths = trie.getFolderPaths()
+      currentExplorerState = folderPaths.map((path) => {
+        const previousState = oldIndex.get(path)
+        return {
+          path,
+          collapsed:
+            previousState === undefined ? opts.folderDefaultState === "collapsed" : previousState,
+        }
+      })
 
-    // Clear previously rendered file nodes on SPA navigations.
-    for (const node of [...explorerUl.children]) {
-      if (!node.classList.contains("overflow-end")) {
-        node.remove()
+      const explorerUl = explorer.querySelector(".explorer-ul")
+      if (!explorerUl) continue
+
+      // Clear previously rendered file nodes on SPA navigations.
+      for (const node of [...explorerUl.children]) {
+        if (!node.classList.contains("overflow-end")) {
+          node.remove()
+        }
       }
-    }
 
-    // Create and insert new content
-    const fragment = document.createDocumentFragment()
-    for (const child of trie.children) {
-      const node = child.isFolder
-        ? createFolderNode(currentSlug, child, opts)
-        : createFileNode(currentSlug, child)
+      // Create and insert new content
+      const fragment = document.createDocumentFragment()
+      for (const child of trie.children) {
+        const node = child.isFolder
+          ? createFolderNode(currentSlug, child, opts)
+          : createFileNode(currentSlug, child)
 
-      fragment.appendChild(node)
-    }
-    const overflowEnd = explorerUl.querySelector(".overflow-end")
-    explorerUl.insertBefore(fragment, overflowEnd)
-
-    // restore explorer scrollTop position if it exists
-    const scrollTop = sessionStorage.getItem("explorerScrollTop")
-    if (scrollTop) {
-      explorerUl.scrollTop = parseInt(scrollTop)
-    } else {
-      // try to scroll to the active element if it exists
-      const activeElement = explorerUl.querySelector(".active")
-      if (activeElement) {
-        activeElement.scrollIntoView({ behavior: "smooth" })
+        fragment.appendChild(node)
       }
-    }
+      const overflowEnd = explorerUl.querySelector(".overflow-end")
+      explorerUl.insertBefore(fragment, overflowEnd)
 
-    // Set up event handlers
-    const explorerButtons = explorer.getElementsByClassName(
-      "explorer-toggle",
-    ) as HTMLCollectionOf<HTMLElement>
-    for (const button of explorerButtons) {
-      button.addEventListener("click", toggleExplorer)
-      window.addCleanup(() => button.removeEventListener("click", toggleExplorer))
-    }
+      // restore explorer scrollTop position if it exists
+      const scrollTop = sessionStorage.getItem("explorerScrollTop")
+      if (scrollTop) {
+        explorerUl.scrollTop = parseInt(scrollTop)
+      } else {
+        // try to scroll to the active element if it exists
+        const activeElement = explorerUl.querySelector(".active")
+        if (activeElement) {
+          activeElement.scrollIntoView({ behavior: "smooth" })
+        }
+      }
 
-    // Set up folder click handlers
-    if (opts.folderClickBehavior === "collapse") {
-      const folderButtons = explorer.getElementsByClassName(
-        "folder-button",
+      // Set up event handlers
+      const explorerButtons = explorer.getElementsByClassName(
+        "explorer-toggle",
       ) as HTMLCollectionOf<HTMLElement>
-      for (const button of folderButtons) {
-        button.addEventListener("click", toggleFolder)
-        window.addCleanup(() => button.removeEventListener("click", toggleFolder))
+      for (const button of explorerButtons) {
+        button.addEventListener("click", toggleExplorer)
+        window.addCleanup(() => button.removeEventListener("click", toggleExplorer))
       }
-    }
 
-    const folderIcons = explorer.getElementsByClassName(
-      "folder-icon",
-    ) as HTMLCollectionOf<HTMLElement>
-    for (const icon of folderIcons) {
-      icon.addEventListener("click", toggleFolder)
-      window.addCleanup(() => icon.removeEventListener("click", toggleFolder))
+      // Set up folder click handlers
+      if (opts.folderClickBehavior === "collapse") {
+        const folderButtons = explorer.getElementsByClassName(
+          "folder-button",
+        ) as HTMLCollectionOf<HTMLElement>
+        for (const button of folderButtons) {
+          button.addEventListener("click", toggleFolder)
+          window.addCleanup(() => button.removeEventListener("click", toggleFolder))
+        }
+      }
+
+      const folderIcons = explorer.getElementsByClassName(
+        "folder-icon",
+      ) as HTMLCollectionOf<HTMLElement>
+      for (const icon of folderIcons) {
+        icon.addEventListener("click", toggleFolder)
+        window.addCleanup(() => icon.removeEventListener("click", toggleFolder))
+      }
+    } catch (error) {
+      console.error("[Explorer] Failed to initialize explorer.", error)
     }
   }
 }
