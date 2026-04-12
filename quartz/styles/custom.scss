@@ -1,0 +1,124 @@
+@use "./base.scss";
+
+:root {
+  --hero-border: rgba(21, 94, 117, 0.16);
+  --hero-shadow: rgba(19, 33, 48, 0.08);
+  --hero-muted: rgba(77, 74, 69, 0.78);
+}
+
+.page article.home-page {
+  display: grid;
+  gap: 2rem;
+}
+
+.home-hero {
+  display: grid;
+  gap: 1rem;
+  padding: 2rem;
+  border: 1px solid var(--hero-border);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at top right, rgba(192, 127, 0, 0.16), transparent 30%),
+    linear-gradient(135deg, rgba(21, 94, 117, 0.08), rgba(255, 255, 255, 0));
+  box-shadow: 0 24px 60px -36px var(--hero-shadow);
+}
+
+.home-eyebrow {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+.home-hero h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 0.95;
+}
+
+.home-copy {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 48rem;
+  color: var(--hero-muted);
+}
+
+.home-copy p {
+  margin: 0;
+}
+
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.home-link,
+.category-card {
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease;
+}
+
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.72rem 1rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--light) 92%, white 8%);
+}
+
+.home-link:hover,
+.category-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -24px var(--hero-shadow);
+  border-color: var(--secondary);
+}
+
+.category-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.category-card {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 1rem;
+  text-decoration: none;
+  background: color-mix(in srgb, var(--light) 94%, white 6%);
+}
+
+.category-card h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.category-card p {
+  margin: 0;
+  color: var(--darkgray);
+  font-size: 0.95rem;
+}
+
+.explorer .title-button h2 {
+  letter-spacing: 0.02em;
+}
+
+.page article.section-page {
+  max-width: 50rem;
+}
+
+@media (max-width: 800px) {
+  .home-hero {
+    padding: 1.4rem;
+  }
+}
