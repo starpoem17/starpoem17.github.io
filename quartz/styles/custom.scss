@@ -152,20 +152,21 @@ body[data-slug="index"] .page article.home-page {
   margin: 0;
 }
 
-.home-page .home-focus {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  margin-top: 1.12rem;
-}
-
-.home-page .home-focus-lead {
-  margin: 0;
+.home-page .home-interest-lead {
+  margin: 1.12rem 0 10px;
   color: var(--darkgray);
   max-inline-size: 37rem;
-  font-size: 0.93rem;
-  line-height: 1.72;
-  letter-spacing: 0.005em;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.96;
+  letter-spacing: 0.008em;
+  text-align: left;
+}
+
+.home-page :is(.home-interests, .home-actions) {
+  grid-column: 1 / -1;
+  justify-self: center;
 }
 
 .home-page .home-interests {
@@ -174,8 +175,8 @@ body[data-slug="index"] .page article.home-page {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  width: 100%;
-  margin: 18px auto 0;
+  width: max-content;
+  margin: 0 auto;
 }
 
 .home-page .home-interest-pill {
@@ -198,8 +199,6 @@ body[data-slug="index"] .page article.home-page {
 }
 
 .home-page .home-actions {
-  grid-column: 1 / -1;
-  justify-self: center;
   display: grid;
   grid-template-columns: repeat(4, 124px);
   justify-content: center;
@@ -207,7 +206,7 @@ body[data-slug="index"] .page article.home-page {
   column-gap: 12px;
   row-gap: 12px;
   width: max-content;
-  margin: 28px auto 0;
+  margin: 20px auto 0;
 }
 
 .home-page .home-action-btn {
@@ -349,6 +348,10 @@ body[data-slug="index"] .page article.home-page {
 }
 
 @media (max-width: 680px) {
+  .home-page .home-interests {
+    width: 100%;
+  }
+
   .home-page .home-actions {
     grid-template-columns: repeat(2, 124px);
   }

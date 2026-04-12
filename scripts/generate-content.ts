@@ -182,12 +182,10 @@ cssclasses:
       <div class="home-bio">
 ${introParagraphs}
       </div>
-      <div class="home-focus">
-        <p class="home-focus-lead">${PROFILE.focusLead}</p>
-        <div class="home-interests" aria-label="Research interests">
+      <p class="home-interest-lead">${PROFILE.focusLead}</p>
+    </div>
+    <div class="home-interests" aria-label="Research interests">
 ${focusAreas}
-        </div>
-      </div>
     </div>
     <div class="home-actions" aria-label="Contact links">
 ${profileLinks}
