@@ -68,11 +68,15 @@ body[data-slug="index"] .page article.home-page {
   }
 }
 
-.about-me {
+.home-page .about-me {
   padding: 0.45rem 0 1.55rem;
 }
 
-.about-me h1 {
+.home-page :is(h1, h2) > a[role="anchor"] {
+  display: none !important;
+}
+
+.home-page .about-me h1 {
   margin: 0 0 1.85rem;
   font-size: clamp(1.9rem, 3.2vw, 2.35rem);
   font-weight: 600;
@@ -80,23 +84,22 @@ body[data-slug="index"] .page article.home-page {
   letter-spacing: -0.012em;
 }
 
-.about-me__intro {
-  display: flex;
-  align-items: flex-start;
-  gap: clamp(1.5rem, 2.6vw, 2.4rem);
-  flex-wrap: nowrap;
+.home-page .home-hero {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 32px;
   width: 100%;
   margin-top: 0.5rem;
 }
 
-.about-me__media {
+.home-page .home-media {
   display: flex;
   justify-content: flex-start;
-  flex: 0 0 10rem;
-  margin-top: 0.12rem;
+  padding-top: 0.12rem;
 }
 
-.profile-photo {
+.home-page .profile-photo {
   display: block;
   width: 10rem;
   height: 10rem;
@@ -106,17 +109,15 @@ body[data-slug="index"] .page article.home-page {
   border: 3px solid var(--lightgray);
 }
 
-.about-me__content {
-  display: grid;
-  gap: 1.28rem;
-  align-content: start;
-  flex: 1 1 0;
+.home-page .home-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   min-width: 0;
-  max-width: 46rem;
-  padding-top: 0.12rem;
+  max-width: 720px;
 }
 
-.about-me__content h2 {
+.home-page .home-copy h2 {
   margin: 0;
   font-size: clamp(1.78rem, 2.8vw, 2.08rem);
   font-weight: 700;
@@ -124,8 +125,8 @@ body[data-slug="index"] .page article.home-page {
   letter-spacing: -0.018em;
 }
 
-.about-me__role {
-  margin: -0.7rem 0 0;
+.home-page .home-role {
+  margin: 0.45rem 0 0;
   color: var(--panel-muted);
   font-size: 0.9rem;
   font-weight: 400;
@@ -133,9 +134,10 @@ body[data-slug="index"] .page article.home-page {
   letter-spacing: 0.014em;
 }
 
-.about-me__copy {
+.home-page .home-bio {
   display: grid;
   gap: 0.96rem;
+  margin-top: 1.18rem;
   max-inline-size: 39rem;
   color: var(--darkgray);
   font-size: 1rem;
@@ -144,17 +146,18 @@ body[data-slug="index"] .page article.home-page {
   text-wrap: pretty;
 }
 
-.about-me__copy p {
+.home-page .home-bio p {
   margin: 0;
 }
 
-.about-me__focus {
-  display: grid;
-  gap: 0.72rem;
-  margin-top: 0.08rem;
+.home-page .home-focus {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 1.12rem;
 }
 
-.about-me__focus-lead {
+.home-page .home-focus-lead {
   margin: 0;
   color: var(--darkgray);
   max-inline-size: 37rem;
@@ -163,79 +166,86 @@ body[data-slug="index"] .page article.home-page {
   letter-spacing: 0.005em;
 }
 
-.research-tag-list {
+.home-page .home-interests {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  width: 100%;
+  margin: 18px auto 0;
 }
 
-.research-tag {
+.home-page .home-interest-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2rem;
-  padding: 0 0.86rem;
-  border: 1px solid var(--lightgray);
+  min-width: 148px;
+  height: 36px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border: 1px solid #d8d0c3;
   border-radius: 999px;
-  background: var(--surface-accent);
-  color: var(--dark);
-  font-size: 0.83rem;
+  background: #f7f2ea;
+  color: #5c554c;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.012em;
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
-.about-me__links {
-  display: flex;
-  flex-wrap: wrap;
+.home-page .home-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 124px);
   justify-content: center;
-  gap: 0.62rem;
-  margin-top: 0.28rem;
-  width: min(100%, 36rem);
-  align-self: stretch;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 12px;
+  width: 100%;
+  margin: 24px auto 0;
 }
 
-.profile-link {
+.home-page .home-action-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1 1 8rem;
-  min-width: 8rem;
-  max-width: 8.85rem;
-  min-height: 2.4rem;
-  padding: 0.52rem 0.95rem;
-  border: 1px solid var(--lightgray);
-  border-radius: 0.38rem;
-  background: var(--button-surface);
-  color: var(--darkgray);
-  font-size: 0.88rem;
-  font-weight: 500;
-  letter-spacing: 0.008em;
-  line-height: 1;
+  width: 124px;
+  height: 44px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border: 1px solid #d8d0c3;
+  border-radius: 10px;
+  background: #fbf8f2;
+  color: #2b2b2b;
   text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
   white-space: nowrap;
   transition:
-    border-color 140ms ease,
-    color 140ms ease,
-    background-color 140ms ease;
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
-.profile-link .external-icon {
+.home-page .home-action-btn .external-icon {
   display: none;
 }
 
-.profile-link:hover {
-  border-color: var(--secondary);
-  background: rgba(40, 75, 99, 0.04);
-  color: var(--secondary);
+.home-page .home-action-btn:hover,
+.home-page .home-action-btn:focus-visible {
+  background: #efe7da;
+  border-color: #aba293;
+  color: #2b2b2b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(43, 43, 43, 0.06);
 }
 
-.profile-link:focus-visible {
-  outline: 2px solid var(--secondary);
+.home-page .home-action-btn:focus-visible {
+  outline: 2px solid rgba(40, 75, 99, 0.28);
   outline-offset: 2px;
 }
 
@@ -311,41 +321,31 @@ body[data-slug="index"] .page article.home-page {
     max-width: 100%;
   }
 
-  .about-me__intro {
-    gap: 1.35rem;
-    flex-direction: column;
-    align-items: flex-start;
-    flex-wrap: wrap;
+  .home-page .about-me h1 {
+    margin-bottom: 1.2rem;
   }
 
-  .about-me__media {
-    justify-content: flex-start;
-    margin-top: 0;
-    flex-basis: auto;
+  .home-page .home-hero {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
   }
 
-  .profile-photo {
+  .home-page .home-media {
+    padding-top: 0;
+  }
+
+  .home-page .profile-photo {
     width: min(10rem, 100%);
     height: auto;
   }
 
-  .about-me h1 {
-    margin-bottom: 1.2rem;
-  }
-
-  .about-me__content {
-    padding-top: 0;
+  .home-page .home-copy {
     max-width: 100%;
-    gap: 1.18rem;
   }
+}
 
-  .about-me__links {
-    justify-content: flex-start;
-    width: min(100%, 24rem);
-  }
-
-  .profile-link {
-    flex-basis: calc(50% - 0.31rem);
-    max-width: none;
+@media (max-width: 680px) {
+  .home-page .home-actions {
+    grid-template-columns: repeat(2, 124px);
   }
 }

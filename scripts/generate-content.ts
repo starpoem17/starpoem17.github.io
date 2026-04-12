@@ -156,10 +156,10 @@ const folderMetadata = new Map(FOLDER_METADATA.map((entry) => [toPosix(entry.sou
 function buildRootIndex(): string {
   const introParagraphs = PROFILE.intro.map((line) => `      <p>${line}</p>`).join("\n")
   const focusAreas = PROFILE.focusAreas
-    .map((area) => `          <li class="research-tag">${area}</li>`)
+    .map((area) => `          <span class="home-interest-pill">${area}</span>`)
     .join("\n")
   const profileLinks = PROFILE_LINKS.map(
-    (link) => `      <a href="${link.href}" class="profile-link">${link.label}</a>`,
+    (link) => `        <a href="${link.href}" class="home-action-btn">${link.label}</a>`,
   ).join("\n")
 
   return `---
@@ -172,23 +172,23 @@ cssclasses:
 
 <section class="about-me">
   <h1>About Me</h1>
-  <div class="about-me__intro">
-    <div class="about-me__media">
+  <div class="home-hero">
+    <div class="home-media">
       <img src="./${PROFILE_IMAGE_PUBLIC_PATH}" alt="${PROFILE.name}" class="profile-photo" />
     </div>
-    <div class="about-me__content">
+    <div class="home-copy">
       <h2>${PROFILE.name}</h2>
-      <p class="about-me__role">${PROFILE.role}</p>
-      <div class="about-me__copy">
+      <p class="home-role">${PROFILE.role}</p>
+      <div class="home-bio">
 ${introParagraphs}
       </div>
-      <div class="about-me__focus">
-        <p class="about-me__focus-lead">${PROFILE.focusLead}</p>
-        <ul class="research-tag-list">
+      <div class="home-focus">
+        <p class="home-focus-lead">${PROFILE.focusLead}</p>
+        <div class="home-interests" aria-label="Research interests">
 ${focusAreas}
-        </ul>
+        </div>
       </div>
-      <div class="about-me__links">
+      <div class="home-actions" aria-label="Contact links">
 ${profileLinks}
       </div>
     </div>
