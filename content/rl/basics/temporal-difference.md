@@ -16,7 +16,8 @@ Temporal Difference Error, TD error라고도 부른다.
 TD error는 현재 추정값이 Bellman Equation을 얼마나 어기고 있는지 측정하는 값이라고도 할 수 있다. 예를 들어 TD error가 0이면 Bellman Equation이 완벽하게 성립하는 것이다. TD 학습은 Bellman Equation을 맞추는 과정이라고도 볼 수 있다.
 
 # Basic TD error formula
-# $$
+<div class="math-heading-block" data-heading-level="1"></div>
+$$
 \delta_t = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)
 $$
 ### $R_{t+1}$
@@ -43,7 +44,8 @@ TD target이라고 부른다.
 
 TD error가 양수 -> 목표값이 기존 추정보다 더 크다. -> 기존 추정 값을 더 키워야 한다.
 TD error가 음수 -> 목표값이 기존 추정보다 더 작다. -> 기존 추정 값을 더 줄여야 한다.
-# $$
+<div class="math-heading-block" data-heading-level="1"></div>
+$$
 V(S_t) \leftarrow V(S_t) + \alpha \delta_t
 $$
 $\alpha$는 학습률

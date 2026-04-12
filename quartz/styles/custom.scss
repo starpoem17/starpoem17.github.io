@@ -12,6 +12,19 @@
   max-width: 46rem;
 }
 
+.page article .math-heading-block {
+  display: none;
+}
+
+.page article .math-heading-block + .katex-display {
+  margin: 1.5rem 0 1rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+}
+
+.page article .math-heading-block + .katex-display .katex {
+  font-size: 1em;
+}
+
 .left.sidebar {
   gap: 1rem;
 }

@@ -1,6 +1,6 @@
 ---
 title: 'SARSA'
-description: '\delta t = R {t+1} + \gamma Q(S {t+1}, A {t+1})   Q(S t, A t)'
+description: '현재 정책이 실제로 고른 다음 행동  A {t+1} 을 활용해서 타겟을 만든다.'
 draft: false
 date: 2026-04-08
 tags:
@@ -8,7 +8,8 @@ tags:
   - 'rl'
 topSection: 'RL'
 ---
-# $$
+<div class="math-heading-block" data-heading-level="1"></div>
+$$
 \delta_t = R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)
 $$
 현재 정책이 실제로 고른 다음 행동 $A_{t+1}$을 활용해서 타겟을 만든다.

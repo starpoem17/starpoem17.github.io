@@ -15,7 +15,8 @@ topSection: 'RL'
 # Return
 
 Return이란 앞으로 받을 누적 보상을 말한다.
-## $$
+<div class="math-heading-block" data-heading-level="2"></div>
+$$
 G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} \, ...
 $$
 $R_{t+1}$ : 지금 행동하고 받는 즉시 보상
@@ -24,7 +25,8 @@ $R_{t+1}$ : 지금 행동하고 받는 즉시 보상
 # State Value Function(상태가치함수)
 
 정의식은 아래와 같다.
-## $$
+<div class="math-heading-block" data-heading-level="2"></div>
+$$
 V^{\pi}(s) = \mathbb E_{\pi}[G_t \, | \, S_t = s]
 $$
 현재 상태가 s일 때 정책 $\pi$를 따르면 기대되는 return이 얼마인가
@@ -32,7 +34,8 @@ $$
 # Action Value Function(행동가치함수, Q-function)
 
 정의식은 아래와 같다.
-## $$
+<div class="math-heading-block" data-heading-level="2"></div>
+$$
 Q^{\pi}(s,a) = \mathbb E_{\pi}[G_t \, | \, S_t = s, A_t = a]
 $$
 현재 상태가 s이고 이번 행동을 a로 고정한 뒤부터 정책 $\pi$를 따르면 기대되는 return이 얼마인가

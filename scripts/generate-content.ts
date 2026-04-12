@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 import {
   FOLDER_METADATA,
   GENERATED_CONTENT_PATH,
@@ -72,8 +73,10 @@ function truncateDescription(value: string, maxLength = 160): string {
   return `${value.slice(0, maxLength - 1).trimEnd()}…`
 }
 
-function extractDescription(markdown: string): string {
+export function extractDescription(markdown: string): string {
   const cleaned = markdown
+    .replace(/<div class="math-heading-block"[^>]*><\/div>/g, " ")
+    .replace(/\$\$[\s\S]*?\$\$/g, " ")
     .replace(/!\[\[[^\]]+\]\]/g, " ")
     .replace(/(?<!!)\[\[([^\]|#]+)(#[^\]|]+)?(\|([^\]]+))?\]\]/g, "$4$1")
     .replace(/`+/g, " ")
@@ -99,6 +102,72 @@ function stripLeadingFrontmatter(markdown: string): string {
   }
 
   return markdown.slice(closingIndex + "\n---\n".length).replace(/^\n+/, "")
+}
+
+const BROKEN_MATH_HEADING_LINE = /^(#{1,6})\s+\$\$\s*$/
+const INLINE_BROKEN_MATH_HEADING_LINE = /^(#{1,6})\s+\$\$(.+)\$\$\s*$/
+const BLOCK_MATH_DELIMITER_LINE = /^\$\$\s*$/
+
+function buildMathHeadingHook(level: number): string {
+  return `<div class="math-heading-block" data-heading-level="${level}"></div>`
+}
+
+export function normalizeBrokenMathHeadings(markdown: string, sourcePath: string): string {
+  const lines = markdown.split("\n")
+  const normalized: string[] = []
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index]
+    const inlineMatch = line.match(INLINE_BROKEN_MATH_HEADING_LINE)
+    if (inlineMatch) {
+      const level = inlineMatch[1]?.length ?? 1
+      const expression = inlineMatch[2]?.trim()
+      if (!expression) {
+        throw new Error(`Empty inline math heading in ${sourcePath} at line ${index + 1}`)
+      }
+
+      normalized.push(buildMathHeadingHook(level), "$$", expression, "$$")
+      continue
+    }
+
+    const blockMatch = line.match(BROKEN_MATH_HEADING_LINE)
+    if (!blockMatch) {
+      normalized.push(line)
+      continue
+    }
+
+    const level = blockMatch[1]?.length ?? 1
+    const mathLines: string[] = []
+    let foundClosingDelimiter = false
+
+    for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
+      if (BLOCK_MATH_DELIMITER_LINE.test(lines[cursor] ?? "")) {
+        foundClosingDelimiter = true
+        index = cursor
+        break
+      }
+
+      mathLines.push(lines[cursor] ?? "")
+    }
+
+    if (!foundClosingDelimiter) {
+      throw new Error(`Unclosed math heading in ${sourcePath} starting at line ${index + 1}`)
+    }
+
+    normalized.push(buildMathHeadingHook(level), "$$", ...mathLines, "$$")
+  }
+
+  return normalized.join("\n")
+}
+
+export function assertNoBrokenMathHeadings(markdown: string, sourcePath: string): void {
+  const brokenLine = markdown
+    .split("\n")
+    .findIndex((line) => BROKEN_MATH_HEADING_LINE.test(line) || INLINE_BROKEN_MATH_HEADING_LINE.test(line))
+
+  if (brokenLine !== -1) {
+    throw new Error(`Unsupported math heading pattern remains in ${sourcePath} at line ${brokenLine + 1}`)
+  }
 }
 
 async function listFiles(rootDir: string): Promise<string[]> {
@@ -398,7 +467,10 @@ async function main(): Promise<void> {
   for (const note of noteEntries) {
     const sourcePath = path.join(SOURCE_ROOT, note.sourceRelativePath)
     const rawMarkdown = await fs.readFile(sourcePath, "utf8")
-    const markdownBody = stripLeadingFrontmatter(rawMarkdown)
+    const markdownBody = normalizeBrokenMathHeadings(
+      stripLeadingFrontmatter(rawMarkdown),
+      note.sourceRelativePath,
+    )
     const outputPath = path.join(CONTENT_ROOT, note.outputRelativePath)
 
     const transformedBody = markdownBody
@@ -437,6 +509,8 @@ async function main(): Promise<void> {
         return `[${alias ?? linkedNote.title}](${relativePath}${anchorSuffix})`
       })
 
+    assertNoBrokenMathHeadings(transformedBody, note.sourceRelativePath)
+
     const sourceStat = await fs.stat(sourcePath)
     const frontmatter = buildFrontmatter(
       note,
@@ -452,7 +526,11 @@ async function main(): Promise<void> {
   console.log(`Site title: ${SITE_TITLE}`)
 }
 
-main().catch((error) => {
-  console.error(error)
-  process.exitCode = 1
-})
+const isEntrypoint = process.argv[1] != null && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+
+if (isEntrypoint) {
+  main().catch((error) => {
+    console.error(error)
+    process.exitCode = 1
+  })
+}

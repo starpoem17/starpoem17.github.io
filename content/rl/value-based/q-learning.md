@@ -1,6 +1,6 @@
 ---
 title: 'Q-Learning'
-description: '\delta t = R {t+1} + \gamma \max {a''}(S {t+1}, a'')   Q(S t, A t)'
+description: '현재 정책이 실제로 고른 다음 행동이 아닌 현재 Q함수를 기준으로 Q값을 최대화하는 어떤 행동  a'' 을 타겟으로 한다. 즉, 현재 환경에 대해 가장 완벽하고 이상적인 행동을 타겟으로 하는 것은 아니다.'
 draft: false
 date: 2026-04-09
 tags:
@@ -8,7 +8,8 @@ tags:
   - 'rl'
 topSection: 'RL'
 ---
-# $$
+<div class="math-heading-block" data-heading-level="1"></div>
+$$
 \delta_t = R_{t+1} + \gamma \max_{a'}(S_{t+1}, a') - Q(S_t, A_t)
 $$
 현재 정책이 실제로 고른 다음 행동이 아닌 현재 Q함수를 기준으로 Q값을 최대화하는 어떤 행동 $a'$을 타겟으로 한다. 즉, 현재 환경에 대해 가장 완벽하고 이상적인 행동을 타겟으로 하는 것은 아니다.

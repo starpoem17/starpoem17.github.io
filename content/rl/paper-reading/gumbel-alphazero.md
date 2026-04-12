@@ -25,11 +25,13 @@ PUCT는 cumulative regret를 최소화하는 데에 특화된 알고리즘이다
 # Gumbel-max trick
 
 일반적인 딥러닝 상황에서는 softmax 함수를 활용하여 확률 분포를 계산한 뒤 샘플링하지만 Gumbel-max trick을 사용하면 softmax 연산 없이도 동일한 효과를 얻을 수 있다.
-### $$
+<div class="math-heading-block" data-heading-level="3"></div>
+$$
 \pi(a) = softmax(logits(a))
 $$
 위처럼 softmax를 계산하는 대신 $g(a) \sim Gumbel(0,1)$을 활용할 수 있다.
-### $$
+<div class="math-heading-block" data-heading-level="3"></div>
+$$
 \arg\max_{a}(logits(a) + g(a))
 $$
 각 로짓에 Gumbel noise를 더한 뒤 argmax를 취하면 softmax를 명시적으로 계산하지 않고도 $\pi(a)$에서 샘플링한 것과 완전히 동일한 분포의 샘플을 얻을 수 있는 것이다.

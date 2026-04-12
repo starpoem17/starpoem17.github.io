@@ -1,6 +1,6 @@
 ---
 title: 'Bellman Equation of V-function'
-description: 'V^{\pi}(s) = \mathbb E {\pi} [R {t+1} + \gamma V^{\pi}(S {t+1}) \,|\, S t = s]'
+description: '기본적으로 재귀식 형태'
 draft: false
 date: 2026-04-06
 tags:
@@ -8,7 +8,8 @@ tags:
   - 'rl'
 topSection: 'RL'
 ---
-# $$
+<div class="math-heading-block" data-heading-level="1"></div>
+$$
 V^{\pi}(s) = \mathbb E_{\pi} [R_{t+1} + \gamma V^{\pi}(S_{t+1}) \,|\, S_t = s]
 $$
 기본적으로 재귀식 형태
@@ -59,7 +60,8 @@ $[0, 1]$ 범위
 현재 상태는 s라는 evidence
 
 # 더 풀어서 쓴 Bellman Equation
-# $$
+<div class="math-heading-block" data-heading-level="1"></div>
+$$
 V^{\pi}(s) = \sum_{a}\pi(a|s) \sum_{s', r}p(s', r | s, a)[r + \gamma V^{\pi}(s')]
 $$
 의미는 똑같다.
