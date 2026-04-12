@@ -4,10 +4,9 @@ description: '탄생 배경'
 draft: false
 date: 2026-03-28
 tags:
-  - "datascience"
-  - "rnn"
   - "notes"
-category: 'rnn'
+  - 'datascience'
+topSection: 'Datascience'
 ---
 
 

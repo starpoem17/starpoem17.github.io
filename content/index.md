@@ -6,9 +6,14 @@ cssclasses:
   - home-page
 ---
 
-<section class="about-me">
+<nav class="home-nav">
+  <a href="#about">About</a>
+  <a href="#notes">Notes</a>
+</nav>
+
+<section id="about" class="about-me">
   <div class="about-me__media">
-    <img src="./obsidian/assets/profile.jpg" alt="Hwajoong Kim" class="profile-photo" />
+    <img src="./static/profile.jpg" alt="Hwajoong Kim" class="profile-photo" />
   </div>
   <div class="about-me__content">
     <p class="about-me__eyebrow">About me</p>
@@ -27,8 +32,8 @@ cssclasses:
   </div>
 </section>
 
-## Notes
+## Notes {#notes}
 
 Browse the note tree on the left. The structure follows the folders inside my Obsidian vault and is designed to scale to deeper hierarchies over time.
 
-- [Datascience](./obsidian/datascience)
+- [Datascience](./datascience/)

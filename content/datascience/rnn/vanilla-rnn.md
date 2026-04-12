@@ -4,10 +4,9 @@ description: '함수 f가 다음과 같이 정의되는 경우 이를 Vanilla RN
 draft: false
 date: 2026-03-27
 tags:
-  - "datascience"
-  - "rnn"
   - "notes"
-category: 'rnn'
+  - 'datascience'
+topSection: 'Datascience'
 ---
 
 

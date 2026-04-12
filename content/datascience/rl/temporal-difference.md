@@ -4,10 +4,9 @@ description: 'Temporal Difference Error, TD error라고도 부른다.'
 draft: false
 date: 2026-04-09
 tags:
-  - "datascience"
-  - "rl"
   - "notes"
-category: 'rl'
+  - 'datascience'
+topSection: 'Datascience'
 ---
 
 Temporal Difference Error, TD error라고도 부른다.

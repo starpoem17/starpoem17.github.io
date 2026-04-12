@@ -6,10 +6,8 @@ export const SITE_LOCALE = "en-US"
 
 export const SOURCE_OBSIDIAN_ROOT = "obsidian"
 export const GENERATED_CONTENT_PATH = "content"
-export const NOTES_ROOT_SLUG = "obsidian"
-
-export const PROFILE_IMAGE_SOURCE_PATH = "profile.jpg"
-export const PROFILE_IMAGE_OUTPUT_PATH = `${NOTES_ROOT_SLUG}/assets/profile.jpg`
+export const EXPLORER_TITLE = "Notes"
+export const PROFILE_IMAGE_PUBLIC_PATH = "static/profile.jpg"
 
 export const PROFILE = {
   name: "Hwajoong Kim",
@@ -101,14 +99,14 @@ export function prettifySegment(segment: string): string {
 
 export function sourceFolderToSlug(folderPath: string): string {
   const parts = toPosix(folderPath).split("/").filter(Boolean).map(slugifySegment)
-  return [NOTES_ROOT_SLUG, ...parts].join("/")
+  return parts.join("/")
 }
 
 export function sourceNoteToSlug(noteSourcePath: string): string {
   const normalizedSourcePath = toPosix(noteSourcePath)
   const parsed = path.posix.parse(normalizedSourcePath)
   const folderParts = parsed.dir.split("/").filter(Boolean).map(slugifySegment)
-  return [NOTES_ROOT_SLUG, ...folderParts, slugifySegment(parsed.name)].join("/")
+  return [...folderParts, slugifySegment(parsed.name)].join("/")
 }
 
 export const SECTION_ORDER = SECTION_DEFINITIONS.map((section) =>

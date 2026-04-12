@@ -4,10 +4,9 @@ description: '\delta t = R {t+1} + \gamma \max {a''}(S {t+1}, a'')   Q(S t, A t)
 draft: false
 date: 2026-04-09
 tags:
-  - "datascience"
-  - "rl"
   - "notes"
-category: 'rl'
+  - 'datascience'
+topSection: 'Datascience'
 ---
 # $$
 \delta_t = R_{t+1} + \gamma \max_{a'}(S_{t+1}, a') - Q(S_t, A_t)

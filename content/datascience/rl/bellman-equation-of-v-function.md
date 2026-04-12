@@ -4,10 +4,9 @@ description: 'V^{\pi}(s) = \mathbb E {\pi} [R {t+1} + \gamma V^{\pi}(S {t+1}) \,
 draft: false
 date: 2026-04-06
 tags:
-  - "datascience"
-  - "rl"
   - "notes"
-category: 'rl'
+  - 'datascience'
+topSection: 'Datascience'
 ---
 # $$
 V^{\pi}(s) = \mathbb E_{\pi} [R_{t+1} + \gamma V^{\pi}(S_{t+1}) \,|\, S_t = s]

@@ -4,10 +4,9 @@ description: 'Technical note.'
 draft: false
 date: 2026-03-27
 tags:
-  - "datascience"
-  - "rnn"
   - "notes"
-category: 'rnn'
+  - 'datascience'
+topSection: 'Datascience'
 ---
 
 

@@ -5,10 +5,8 @@ import {
   GENERATED_CONTENT_PATH,
   HOME_NOTES_DESCRIPTION,
   HOME_NOTES_HEADING,
-  NOTES_ROOT_SLUG,
   PROFILE,
-  PROFILE_IMAGE_OUTPUT_PATH,
-  PROFILE_IMAGE_SOURCE_PATH,
+  PROFILE_IMAGE_PUBLIC_PATH,
   PROFILE_LINKS,
   SECTION_DEFINITIONS,
   SITE_TITLE,
@@ -21,9 +19,6 @@ import {
 
 const SOURCE_ROOT = path.resolve(SOURCE_OBSIDIAN_ROOT)
 const CONTENT_ROOT = path.resolve(GENERATED_CONTENT_PATH)
-const NOTES_ROOT = path.join(CONTENT_ROOT, NOTES_ROOT_SLUG)
-const PROFILE_IMAGE_SOURCE = path.resolve(PROFILE_IMAGE_SOURCE_PATH)
-const PROFILE_IMAGE_OUTPUT = path.join(CONTENT_ROOT, PROFILE_IMAGE_OUTPUT_PATH)
 
 const MARKDOWN_EXTENSIONS = new Set([".md"])
 const ASSET_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"])
@@ -133,14 +128,14 @@ function sourcePathToOutputRelativePath(sourceRelativePath: string): string {
   const normalized = toPosix(sourceRelativePath)
   const parsed = path.posix.parse(normalized)
   const folderSegments = parsed.dir.split("/").filter(Boolean).map(slugifySegment)
-  return path.posix.join(NOTES_ROOT_SLUG, ...folderSegments, `${slugifySegment(parsed.name)}.md`)
+  return path.posix.join(...folderSegments, `${slugifySegment(parsed.name)}.md`)
 }
 
 function assetSourcePathToOutputRelativePath(sourceRelativePath: string): string {
   const normalized = toPosix(sourceRelativePath)
   const parsed = path.posix.parse(normalized)
   const folderSegments = parsed.dir.split("/").filter(Boolean).map(slugifySegment)
-  return path.posix.join(NOTES_ROOT_SLUG, ...folderSegments, parsed.base)
+  return path.posix.join(...folderSegments, parsed.base)
 }
 
 function buildFrontmatter(note: NoteEntry, description: string, date: string): string {
@@ -173,7 +168,7 @@ function topSectionLinks(sectionFolders: string[]): string {
     .map((folderPath) => {
       const definition = SECTION_DEFINITIONS.find((entry) => entry.sourcePath === folderPath)
       const title = definition?.title ?? prettifySegment(path.posix.basename(folderPath))
-      return `- [${title}](./${sourceFolderToSlug(folderPath)})`
+      return `- [${title}](./${sourceFolderToSlug(folderPath)}/)`
     })
     .join("\n")
 }
@@ -192,9 +187,14 @@ cssclasses:
   - home-page
 ---
 
-<section class="about-me">
+<nav class="home-nav">
+  <a href="#about">About</a>
+  <a href="#notes">Notes</a>
+</nav>
+
+<section id="about" class="about-me">
   <div class="about-me__media">
-    <img src="./${PROFILE_IMAGE_OUTPUT_PATH}" alt="${PROFILE.name}" class="profile-photo" />
+    <img src="./${PROFILE_IMAGE_PUBLIC_PATH}" alt="${PROFILE.name}" class="profile-photo" />
   </div>
   <div class="about-me__content">
     <p class="about-me__eyebrow">About me</p>
@@ -209,7 +209,7 @@ ${profileLinks}
   </div>
 </section>
 
-## ${HOME_NOTES_HEADING}
+## ${HOME_NOTES_HEADING} {#notes}
 
 ${HOME_NOTES_DESCRIPTION}
 
@@ -217,26 +217,10 @@ ${topSectionLinks(sectionFolders)}
 `
 }
 
-function buildNotesRootIndex(sectionFolders: string[]): string {
-  const listItems = topSectionLinks(sectionFolders)
-  return `---
-title: ${yamlString("obsidian")}
-description: ${yamlString("Root of the published Obsidian note tree.")}
-draft: false
-cssclasses:
-  - section-page
----
-
-The note tree below mirrors the high-level structure of the files stored in \`${SOURCE_OBSIDIAN_ROOT}/\`.
-
-${listItems}
-`
-}
-
 function buildFolderIndex(folderPath: string, hasOverrideDescription: string | undefined): string {
   const title =
     folderPath === ""
-      ? "obsidian"
+      ? "Notes"
       : (folderDefinitionMap().get(folderPath)?.title ??
         prettifySegment(path.posix.basename(folderPath)))
   const description =
@@ -399,9 +383,8 @@ async function main(): Promise<void> {
     new Set(noteEntries.map((note) => note.sourceRelativePath.split("/")[0]).filter(Boolean)),
   )
 
-  await fs.rm(NOTES_ROOT, { recursive: true, force: true })
+  await fs.rm(CONTENT_ROOT, { recursive: true, force: true })
   await writeTextFile(path.join(CONTENT_ROOT, "index.md"), buildRootIndex(sectionFolders))
-  await writeTextFile(path.join(NOTES_ROOT, "index.md"), buildNotesRootIndex(sectionFolders))
 
   for (const folderPath of Array.from(folderSet).sort((a, b) => a.localeCompare(b))) {
     if (folderPath === "") {
@@ -416,8 +399,6 @@ async function main(): Promise<void> {
   for (const asset of assetMap.values()) {
     await copyFile(asset.sourcePath, path.join(CONTENT_ROOT, asset.outputRelativePath))
   }
-
-  await copyFile(PROFILE_IMAGE_SOURCE, PROFILE_IMAGE_OUTPUT)
 
   for (const note of noteEntries) {
     const sourcePath = path.join(SOURCE_ROOT, note.sourceRelativePath)

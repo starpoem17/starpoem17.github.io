@@ -4,10 +4,9 @@ description: 'Q^{\pi}(s,a) = \mathbb E {\pi}[R {t+1} + \gamma Q^{\pi}(S {t+1}, A
 draft: false
 date: 2026-04-08
 tags:
-  - "datascience"
-  - "rl"
   - "notes"
-category: 'rl'
+  - 'datascience'
+topSection: 'Datascience'
 ---
 # $$
 Q^{\pi}(s,a) = \mathbb E_{\pi}[R_{t+1} + \gamma Q^{\pi}(S_{t+1}, A_{t+1})\,|\,S_t = s, A_t = a]
