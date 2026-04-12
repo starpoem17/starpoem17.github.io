@@ -108,6 +108,19 @@ const explorerSortFnSource = `(a, b) => {
   return compareText(a.displayName, b.displayName)
 }`
 
+const explorerMapFnSource = `(node) => {
+  if (!node.isFolder) {
+    return
+  }
+
+  const baseName = (node.displayName ?? "").replace(/\\s+\\(\\d+\\)$/, "").trim()
+  if (baseName.length === 0) {
+    return
+  }
+
+  node.displayName = \`\${baseName} (\${node.children.length})\`
+}`
+
 export const explorerFilterFn = new Function(
   `return ${explorerFilterFnSource}`,
 )() as ExplorerOptions["filterFn"]
@@ -115,6 +128,10 @@ export const explorerFilterFn = new Function(
 export const explorerSortFn = new Function(
   `return ${explorerSortFnSource}`,
 )() as ExplorerOptions["sortFn"]
+
+export const explorerMapFn = new Function(
+  `return ${explorerMapFnSource}`,
+)() as ExplorerOptions["mapFn"]
 
 export const folderSortFn: SortFn = (a: QuartzPluginData, b: QuartzPluginData) => {
   const aIsFolder = isFolderSlug(a.slug)

@@ -169,6 +169,10 @@ button.mobile-explorer,
   }
 }
 
+.explorer.explorer-no-title > .explorer-content {
+  margin-top: 0;
+}
+
 @media all and not ($mobile) {
   .explorer.collapsed > .explorer-content {
     max-height: 0;

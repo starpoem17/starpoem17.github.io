@@ -1,7 +1,7 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 import type { QuartzComponent } from "./quartz/components/types"
-import { explorerFilterFn, explorerSortFn, explorerTitle } from "./quartz.custom"
+import { explorerFilterFn, explorerMapFn, explorerSortFn, explorerTitle } from "./quartz.custom"
 
 const EmptyFooter: QuartzComponent = () => null
 
@@ -34,9 +34,10 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Explorer({
       title: explorerTitle,
       folderClickBehavior: "collapse",
-      folderDefaultState: "open",
-      useSavedState: true,
+      folderDefaultState: "collapsed",
+      useSavedState: false,
       filterFn: explorerFilterFn,
+      mapFn: explorerMapFn,
       sortFn: explorerSortFn,
     }),
   ],
@@ -51,9 +52,10 @@ export const defaultListPageLayout: PageLayout = {
     Component.Explorer({
       title: explorerTitle,
       folderClickBehavior: "collapse",
-      folderDefaultState: "open",
-      useSavedState: true,
+      folderDefaultState: "collapsed",
+      useSavedState: false,
       filterFn: explorerFilterFn,
+      mapFn: explorerMapFn,
       sortFn: explorerSortFn,
     }),
   ],

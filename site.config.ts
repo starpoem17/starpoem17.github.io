@@ -6,7 +6,7 @@ export const SITE_LOCALE = "en-US"
 
 export const SOURCE_OBSIDIAN_ROOT = "obsidian"
 export const GENERATED_CONTENT_PATH = "content"
-export const EXPLORER_TITLE = "Notes"
+export const EXPLORER_TITLE = ""
 export const PROFILE_IMAGE_PUBLIC_PATH = "static/profile.jpg"
 
 export const PROFILE = {
