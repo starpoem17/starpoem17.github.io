@@ -18,7 +18,13 @@ export const PROFILE = {
     "My goal is to make complex topics easier to revisit, connect, and extend over time.",
   ],
   focusLead: "My interests lie at the intersection of AI and systems, with a focus on:",
-  focusAreas: ["Robotics", "Embodied AI"],
+  focusAreas: [
+    "Efficient Foundation Models",
+    "Edge AI",
+    "Generative Models",
+    "Multimodal",
+    "Embodied AI",
+  ],
   githubUrl: "https://github.com/starpoem17",
   linkedInUrl: "https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/",
   email: "coolkhj2003@hanyang.ac.kr",
@@ -30,51 +36,55 @@ export const PROFILE_LINKS = [
   { label: "GitHub", href: PROFILE.githubUrl },
 ] as const
 
-export const SECTION_DEFINITIONS = [
+export const FOLDER_METADATA = [
   {
-    sourcePath: "Datascience",
-    title: "Datascience",
-    description:
-      "Notes on reinforcement learning, recurrent neural networks, transformers, and related machine learning topics.",
-  },
-] as const
-
-export const FOLDER_DEFINITIONS = [
-  {
-    sourcePath: "Datascience/RL",
+    sourcePath: "RL",
     title: "RL",
     description:
       "Reinforcement learning notes on value functions, Bellman equations, exploration, and temporal-difference methods.",
   },
   {
-    sourcePath: "Datascience/RNN",
+    sourcePath: "Model Architecture",
+    title: "Model Architecture",
+    description:
+      "Notes on neural architectures and implementation details across recurrent and transformer-based models.",
+  },
+  {
+    sourcePath: "Model Architecture/RNN",
     title: "RNN",
     description:
       "Recurrent network notes from vanilla RNNs and BPTT to bidirectional architectures, LSTMs, and sequence applications.",
   },
   {
-    sourcePath: "Datascience/Transformer",
+    sourcePath: "Model Architecture/Transformer",
     title: "Transformer",
     description:
       "Transformer implementation notes focused on multi-head attention and tensor-shape reasoning.",
   },
 ] as const
 
+export const MANUAL_FOLDER_SOURCE_ORDER = [
+  "RL",
+  "Model Architecture",
+  "Model Architecture/RNN",
+  "Model Architecture/Transformer",
+] as const
+
 export const MANUAL_NOTE_SOURCE_ORDER = [
-  "Datascience/RL/Value Function.md",
-  "Datascience/RL/Bellman Equation of V-function.md",
-  "Datascience/RL/Bellman Equation of Q-function.md",
-  "Datascience/RL/Bellman Optimality Equation.md",
-  "Datascience/RL/Exploration.md",
-  "Datascience/RL/Temporal Difference.md",
-  "Datascience/RL/SARSA.md",
-  "Datascience/RL/Q-Learning.md",
-  "Datascience/RNN/Vanilla RNN.md",
-  "Datascience/RNN/BPTT.md",
-  "Datascience/RNN/Bidirectional-RNN.md",
-  "Datascience/RNN/LSTM.md",
-  "Datascience/RNN/RNN - 활용 방식.md",
-  "Datascience/Transformer/Multi Head Attention - Tensor 차원 흐름.md",
+  "RL/Value Function.md",
+  "RL/Bellman Equation of V-function.md",
+  "RL/Bellman Equation of Q-function.md",
+  "RL/Bellman Optimality Equation.md",
+  "RL/Exploration.md",
+  "RL/Temporal Difference.md",
+  "RL/SARSA.md",
+  "RL/Q-Learning.md",
+  "Model Architecture/RNN/Vanilla RNN.md",
+  "Model Architecture/RNN/BPTT.md",
+  "Model Architecture/RNN/Bidirectional-RNN.md",
+  "Model Architecture/RNN/LSTM.md",
+  "Model Architecture/RNN/RNN - 활용 방식.md",
+  "Model Architecture/Transformer/Multi Head Attention - Tensor 차원 흐름.md",
 ] as const
 
 function toPosix(value: string): string {
@@ -107,11 +117,5 @@ export function sourceNoteToSlug(noteSourcePath: string): string {
   return [...folderParts, slugifySegment(parsed.name)].join("/")
 }
 
-export const SECTION_ORDER = SECTION_DEFINITIONS.map((section) =>
-  sourceFolderToSlug(section.sourcePath),
-)
-
-export const FOLDER_ORDER = FOLDER_DEFINITIONS.map((folder) =>
-  sourceFolderToSlug(folder.sourcePath),
-)
+export const FOLDER_ORDER = MANUAL_FOLDER_SOURCE_ORDER.map((folder) => sourceFolderToSlug(folder))
 export const NOTE_ORDER = MANUAL_NOTE_SOURCE_ORDER.map((note) => sourceNoteToSlug(note))

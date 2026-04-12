@@ -5,8 +5,8 @@ draft: false
 date: 2026-04-08
 tags:
   - "notes"
-  - 'datascience'
-topSection: 'Datascience'
+  - 'rl'
+topSection: 'RL'
 ---
 # $$
 \delta_t = R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)

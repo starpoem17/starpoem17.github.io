@@ -5,8 +5,8 @@ draft: false
 date: 2026-04-09
 tags:
   - "notes"
-  - 'datascience'
-topSection: 'Datascience'
+  - 'rl'
+topSection: 'RL'
 ---
 # $$
 \delta_t = R_{t+1} + \gamma \max_{a'}(S_{t+1}, a') - Q(S_t, A_t)

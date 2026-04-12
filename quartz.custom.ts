@@ -1,15 +1,8 @@
 import type { Options as ExplorerOptions } from "./quartz/components/Explorer"
 import type { SortFn } from "./quartz/components/PageList"
 import type { QuartzPluginData } from "./quartz/plugins/vfile"
-import {
-  EXPLORER_TITLE,
-  FOLDER_ORDER,
-  NOTE_ORDER,
-  PROFILE_LINKS,
-  SECTION_ORDER,
-} from "./site.config"
+import { EXPLORER_TITLE, FOLDER_ORDER, NOTE_ORDER } from "./site.config"
 
-const sectionOrder = new Map<string, number>(SECTION_ORDER.map((slug, index) => [slug, index]))
 const folderOrder = new Map<string, number>(FOLDER_ORDER.map((slug, index) => [slug, index]))
 const noteOrder = new Map<string, number>(NOTE_ORDER.map((slug, index) => [slug, index]))
 
@@ -31,10 +24,7 @@ function pathDepth(slug: string): number {
 function getRank(slug?: string): number {
   const normalizedSlug = normalizeSlug(slug)
   return (
-    noteOrder.get(normalizedSlug) ??
-    folderOrder.get(normalizedSlug) ??
-    sectionOrder.get(normalizedSlug) ??
-    Number.POSITIVE_INFINITY
+    noteOrder.get(normalizedSlug) ?? folderOrder.get(normalizedSlug) ?? Number.POSITIVE_INFINITY
   )
 }
 
@@ -99,5 +89,4 @@ export const folderSortFn: SortFn = (a: QuartzPluginData, b: QuartzPluginData) =
   return compareText(aTitle, bTitle)
 }
 
-export const footerLinks = Object.fromEntries(PROFILE_LINKS.map((link) => [link.label, link.href]))
 export const explorerTitle = EXPLORER_TITLE

@@ -5,8 +5,8 @@ draft: false
 date: 2026-03-25
 tags:
   - "notes"
-  - 'datascience'
-topSection: 'Datascience'
+  - 'model-architecture'
+topSection: 'Model Architecture'
 ---
 
 

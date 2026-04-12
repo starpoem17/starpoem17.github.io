@@ -63,7 +63,7 @@
     display: none;
   }
 
-  button.desktop-explorer {
+  .desktop-explorer {
     display: flex;
   }
 
@@ -72,7 +72,7 @@
       display: flex;
     }
 
-    button.desktop-explorer {
+    .desktop-explorer {
       display: none;
     }
   }
@@ -94,11 +94,10 @@
 }
 
 button.mobile-explorer,
-button.desktop-explorer {
+.desktop-explorer {
   background-color: transparent;
   border: none;
   text-align: left;
-  cursor: pointer;
   padding: 0;
   color: var(--dark);
   display: flex;

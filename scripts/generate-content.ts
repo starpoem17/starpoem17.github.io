@@ -1,12 +1,11 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
 import {
-  FOLDER_DEFINITIONS,
+  FOLDER_METADATA,
   GENERATED_CONTENT_PATH,
   PROFILE,
   PROFILE_IMAGE_PUBLIC_PATH,
   PROFILE_LINKS,
-  SECTION_DEFINITIONS,
   SITE_TITLE,
   SOURCE_OBSIDIAN_ROOT,
   prettifySegment,
@@ -152,23 +151,16 @@ function buildFrontmatter(note: NoteEntry, description: string, date: string): s
   ].join("\n")
 }
 
-function folderDefinitionMap() {
-  return new Map(
-    [...SECTION_DEFINITIONS, ...FOLDER_DEFINITIONS].map((entry) => [
-      toPosix(entry.sourcePath),
-      entry,
-    ]),
-  )
-}
+const folderMetadata = new Map(FOLDER_METADATA.map((entry) => [toPosix(entry.sourcePath), entry]))
 
 function buildRootIndex(): string {
   const introParagraphs = PROFILE.intro.map((line) => `      <p>${line}</p>`).join("\n")
-  const profileLinks = PROFILE_LINKS.map(
-    (link) => `      <a href="${link.href}" class="profile-link">${link.label}</a>`,
-  ).join("\n")
   const focusAreas = PROFILE.focusAreas
     .map((area) => `        <li class="focus-area">${area}</li>`)
     .join("\n")
+  const profileLinks = PROFILE_LINKS.map(
+    (link) => `      <a href="${link.href}" class="profile-link">${link.label}</a>`,
+  ).join("\n")
 
   return `---
 title: ${yamlString(PROFILE.name)}
@@ -190,14 +182,14 @@ cssclasses:
       <div class="about-me__copy">
 ${introParagraphs}
       </div>
-      <div class="about-me__links">
-${profileLinks}
-      </div>
       <div class="about-me__focus">
         <p class="about-me__focus-lead">${PROFILE.focusLead}</p>
         <ul class="focus-area-list">
 ${focusAreas}
         </ul>
+      </div>
+      <div class="about-me__links">
+${profileLinks}
       </div>
     </div>
   </div>
@@ -209,8 +201,7 @@ function buildFolderIndex(folderPath: string, hasOverrideDescription: string | u
   const title =
     folderPath === ""
       ? "Notes"
-      : (folderDefinitionMap().get(folderPath)?.title ??
-        prettifySegment(path.posix.basename(folderPath)))
+      : (folderMetadata.get(folderPath)?.title ?? prettifySegment(path.posix.basename(folderPath)))
   const description =
     hasOverrideDescription ??
     (folderPath === ""
@@ -359,7 +350,6 @@ async function main(): Promise<void> {
     })
   }
 
-  const folderDefinitionLookup = folderDefinitionMap()
   const folderSet = new Set<string>()
   for (const note of noteEntries) {
     for (const folderPath of folderAncestors(path.posix.dirname(note.sourceRelativePath))) {
@@ -376,7 +366,7 @@ async function main(): Promise<void> {
     }
 
     const outputPath = path.join(CONTENT_ROOT, sourceFolderToSlug(folderPath), "index.md")
-    const description = folderDefinitionLookup.get(folderPath)?.description
+    const description = folderMetadata.get(folderPath)?.description
     await writeTextFile(outputPath, buildFolderIndex(folderPath, description))
   }
 

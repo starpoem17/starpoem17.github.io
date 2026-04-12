@@ -5,8 +5,8 @@ draft: false
 date: 2026-04-08
 tags:
   - "notes"
-  - 'datascience'
-topSection: 'Datascience'
+  - 'rl'
+topSection: 'RL'
 ---
 
 탐험을 위해 훈련 상황에서 모델의 수에 의도적인 무작위성을 부여

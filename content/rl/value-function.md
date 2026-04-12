@@ -5,8 +5,8 @@ draft: false
 date: 2026-04-08
 tags:
   - "notes"
-  - 'datascience'
-topSection: 'Datascience'
+  - 'rl'
+topSection: 'RL'
 ---
 
 강화학습에서 에이전트는 "무엇이 좋은가?"를 알고 싶어 한다. 이때 좋은 정도를 수치화한 것이 Value이다.

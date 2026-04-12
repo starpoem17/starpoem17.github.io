@@ -5,8 +5,8 @@ draft: false
 date: 2026-04-08
 tags:
   - "notes"
-  - 'datascience'
-topSection: 'Datascience'
+  - 'rl'
+topSection: 'RL'
 ---
 
 Bellman Expectation Equation은 정책 $\pi$가 정해져 있을 때 그 정책을 따를 경우의 가치에 관한 식이다. 

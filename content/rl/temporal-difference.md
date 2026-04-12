@@ -5,8 +5,8 @@ draft: false
 date: 2026-04-09
 tags:
   - "notes"
-  - 'datascience'
-topSection: 'Datascience'
+  - 'rl'
+topSection: 'RL'
 ---
 
 Temporal Difference Error, TD error라고도 부른다.

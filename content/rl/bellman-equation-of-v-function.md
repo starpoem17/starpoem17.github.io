@@ -5,8 +5,8 @@ draft: false
 date: 2026-04-06
 tags:
   - "notes"
-  - 'datascience'
-topSection: 'Datascience'
+  - 'rl'
+topSection: 'RL'
 ---
 # $$
 V^{\pi}(s) = \mathbb E_{\pi} [R_{t+1} + \gamma V^{\pi}(S_{t+1}) \,|\, S_t = s]
