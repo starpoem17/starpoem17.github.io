@@ -25,12 +25,13 @@ cssclasses:
       <a href="https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/" class="profile-link">LinkedIn</a>
       <a href="https://github.com/starpoem17" class="profile-link">GitHub</a>
       </div>
+      <div class="about-me__focus">
+        <p class="about-me__focus-lead">My interests lie at the intersection of AI and systems, with a focus on:</p>
+        <ul class="focus-area-list">
+        <li class="focus-area">Robotics</li>
+        <li class="focus-area">Embodied AI</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
-
-## Notes
-
-Browse the note tree on the left. The structure follows the folders inside my Obsidian vault and is designed to scale to deeper hierarchies over time.
-
-- [Datascience](./datascience/)

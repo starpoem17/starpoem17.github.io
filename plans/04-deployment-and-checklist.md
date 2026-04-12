@@ -33,9 +33,11 @@ npm run check
 - 홈 상단에 `About`, `Notes` 버튼이 남아 있지 않은가
 - `About Me`가 카드형 박스가 아니라 본문형 섹션인가
 - 프로필 사진, 이름, 역할, 3개 링크 버튼이 자연스럽게 배치되는가
-- `Notes {#notes}`가 그대로 보이지 않고 `Notes`만 보이는가
+- 중앙 `Notes` 단락이 사라졌는가
+- `Robotics`, `Embodied AI` 라벨이 reference 흐름과 비슷하게 배치되는가
 - 왼쪽 헤더가 `Notes`로 보이는가
 - 왼쪽 `Notes`를 눌렀을 때 접힘/펼침이 눈에 보이게 동작하는가
+- `Dark mode` 버튼이 사라졌는가
 
 ## 4. 탐색 체크리스트
 

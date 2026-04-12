@@ -17,6 +17,8 @@ export const PROFILE = {
     "This site publishes the notes I keep in Obsidian and turns them into a browsable public knowledge base.",
     "My goal is to make complex topics easier to revisit, connect, and extend over time.",
   ],
+  focusLead: "My interests lie at the intersection of AI and systems, with a focus on:",
+  focusAreas: ["Robotics", "Embodied AI"],
   githubUrl: "https://github.com/starpoem17",
   linkedInUrl: "https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/",
   email: "coolkhj2003@hanyang.ac.kr",
@@ -27,10 +29,6 @@ export const PROFILE_LINKS = [
   { label: "LinkedIn", href: PROFILE.linkedInUrl },
   { label: "GitHub", href: PROFILE.githubUrl },
 ] as const
-
-export const HOME_NOTES_HEADING = "Notes"
-export const HOME_NOTES_DESCRIPTION =
-  "Browse the note tree on the left. The structure follows the folders inside my Obsidian vault and is designed to scale to deeper hierarchies over time."
 
 export const SECTION_DEFINITIONS = [
   {

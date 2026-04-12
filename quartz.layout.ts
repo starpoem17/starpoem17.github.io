@@ -33,20 +33,12 @@ export const defaultContentPageLayout: PageLayout = {
     }),
   ],
   left: [
-    Component.Flex({
-      components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
-        { Component: Component.Darkmode() },
-      ],
-    }),
+    Component.Search(),
     Component.Explorer({
       title: explorerTitle,
       folderClickBehavior: "collapse",
       folderDefaultState: "open",
-      useSavedState: false,
+      useSavedState: true,
       filterFn: explorerFilterFn,
       sortFn: explorerSortFn,
     }),
@@ -58,20 +50,12 @@ export const defaultContentPageLayout: PageLayout = {
 export const defaultListPageLayout: PageLayout = {
   beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
   left: [
-    Component.Flex({
-      components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
-        { Component: Component.Darkmode() },
-      ],
-    }),
+    Component.Search(),
     Component.Explorer({
       title: explorerTitle,
       folderClickBehavior: "collapse",
       folderDefaultState: "open",
-      useSavedState: false,
+      useSavedState: true,
       filterFn: explorerFilterFn,
       sortFn: explorerSortFn,
     }),

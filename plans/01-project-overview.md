@@ -22,8 +22,10 @@
 
 - 홈 상단의 `About`, `Notes` 버튼 제거
 - 카드형 프로필 박스 제거
-- `Notes {#notes}`가 그대로 보이는 문제 제거
+- 중앙 `Notes` 섹션 자체 제거
+- `Dark mode` 제거
 - 왼쪽 `Notes` 토글을 눌러도 반응이 없는 문제 해결
+- reference와 유사한 글꼴, 사진 크기, 링크 버튼, 외부 링크 아이콘 정렬
 
 ## 3. 화면 기준
 
@@ -37,7 +39,7 @@
 - 한 줄 역할 설명
 - 짧은 소개 문단
 - `Email`, `LinkedIn`, `GitHub` 버튼 3개
-- 그 아래 `Notes` 단락
+- 연구 관심사 라벨 2개: `Robotics`, `Embodied AI`
 
 중요한 점은, 이 구성이 박스 카드 안에 들어간 랜딩 카드처럼 보이면 안 된다는 것이다.
 reference처럼 본문 흐름 속 소개 섹션에 가깝게 보여야 한다.
@@ -64,6 +66,7 @@ reference처럼 본문 흐름 속 소개 섹션에 가깝게 보여야 한다.
 - 우측 Graph
 - Table of Contents
 - Related Notes
+- Dark mode
 
 다만 `News`, `Publications`, `Service`는 이후 확장 가능성을 `plans/` 문서 안에 남겨둔다.
 

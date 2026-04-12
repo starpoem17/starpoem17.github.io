@@ -3,8 +3,6 @@ import path from "node:path"
 import {
   FOLDER_DEFINITIONS,
   GENERATED_CONTENT_PATH,
-  HOME_NOTES_DESCRIPTION,
-  HOME_NOTES_HEADING,
   PROFILE,
   PROFILE_IMAGE_PUBLIC_PATH,
   PROFILE_LINKS,
@@ -163,21 +161,14 @@ function folderDefinitionMap() {
   )
 }
 
-function topSectionLinks(sectionFolders: string[]): string {
-  return sectionFolders
-    .map((folderPath) => {
-      const definition = SECTION_DEFINITIONS.find((entry) => entry.sourcePath === folderPath)
-      const title = definition?.title ?? prettifySegment(path.posix.basename(folderPath))
-      return `- [${title}](./${sourceFolderToSlug(folderPath)}/)`
-    })
-    .join("\n")
-}
-
-function buildRootIndex(sectionFolders: string[]): string {
+function buildRootIndex(): string {
   const introParagraphs = PROFILE.intro.map((line) => `      <p>${line}</p>`).join("\n")
   const profileLinks = PROFILE_LINKS.map(
     (link) => `      <a href="${link.href}" class="profile-link">${link.label}</a>`,
   ).join("\n")
+  const focusAreas = PROFILE.focusAreas
+    .map((area) => `        <li class="focus-area">${area}</li>`)
+    .join("\n")
 
   return `---
 title: ${yamlString(PROFILE.name)}
@@ -202,15 +193,15 @@ ${introParagraphs}
       <div class="about-me__links">
 ${profileLinks}
       </div>
+      <div class="about-me__focus">
+        <p class="about-me__focus-lead">${PROFILE.focusLead}</p>
+        <ul class="focus-area-list">
+${focusAreas}
+        </ul>
+      </div>
     </div>
   </div>
 </section>
-
-## ${HOME_NOTES_HEADING}
-
-${HOME_NOTES_DESCRIPTION}
-
-${topSectionLinks(sectionFolders)}
 `
 }
 
@@ -376,12 +367,8 @@ async function main(): Promise<void> {
     }
   }
 
-  const sectionFolders = Array.from(
-    new Set(noteEntries.map((note) => note.sourceRelativePath.split("/")[0]).filter(Boolean)),
-  )
-
   await fs.rm(CONTENT_ROOT, { recursive: true, force: true })
-  await writeTextFile(path.join(CONTENT_ROOT, "index.md"), buildRootIndex(sectionFolders))
+  await writeTextFile(path.join(CONTENT_ROOT, "index.md"), buildRootIndex())
 
   for (const folderPath of Array.from(folderSet).sort((a, b) => a.localeCompare(b))) {
     if (folderPath === "") {

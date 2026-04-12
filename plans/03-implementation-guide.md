@@ -17,10 +17,10 @@
 2. 카드형 프로필 레이아웃 제거
 3. `About Me` 제목 기반 소개 섹션 구성
 4. 사진, 이름, 역할, 소개 문단, 3개 링크 버튼 배치
-5. 그 아래에 `Notes` 단락 배치
+5. 그 아래에 연구 관심사 라벨 `Robotics`, `Embodied AI` 배치
 
-중요한 점은 `Notes {#notes}` 같은 문법을 남기지 않는 것이다.
-사용자에게는 `Notes`만 보여야 한다.
+중요한 점은 중앙 본문에 `Notes` 단락 자체를 두지 않는 것이다.
+노트 탐색은 왼쪽 Explorer 하나로 집중시킨다.
 
 ## 3. Explorer 토글 수정 단계
 
@@ -31,6 +31,7 @@ Explorer 쪽 구현은 단순 라벨 교체가 아니라 실제 사용감 수정
 - 왼쪽 헤더 라벨을 `Notes`로 유지
 - `Notes` 클릭 시 전체 Explorer가 실제로 접히고 펼쳐지게 함
 - 접힘 상태가 데스크톱에서 눈에 띄게 보이도록 CSS를 보강
+- reference처럼 `Notes` 아래에 실제 디렉토리 구조가 자연스럽게 드러나게 함
 
 즉, 현재처럼 내부적으로 클래스는 바뀌지만 사용자가 체감하지 못하는 상태는 허용하지 않는다.
 
@@ -43,6 +44,7 @@ Explorer 쪽 구현은 단순 라벨 교체가 아니라 실제 사용감 수정
 - 이미지와 텍스트의 자연스러운 2단 또는 1단 흐름
 - 얇은 구분선
 - 과도한 장식보다 정보 구조 우선
+- 글꼴, 글 간격, 색상, 사진 크기, 링크 아이콘 크기를 reference 쪽으로 정렬
 
 이 단계에서 참고 우선순위는 아래와 같다.
 
@@ -56,7 +58,8 @@ Explorer 쪽 구현은 단순 라벨 교체가 아니라 실제 사용감 수정
 
 - `scripts/generate-content.ts`
 - `quartz/styles/custom.scss`
-- 필요 시 `quartz.layout.ts`, `quartz.custom.ts`
+- `quartz.layout.ts`
+- 필요 시 `quartz.custom.ts`, `quartz.config.ts`
 
 즉, 콘텐츠 생성, 스타일, Explorer 동작의 세 군데가 핵심이다.
 
@@ -68,11 +71,13 @@ Explorer 쪽 구현은 단순 라벨 교체가 아니라 실제 사용감 수정
 - `personal/*.md`는 수정하지 않는다
 - 다층 폴더 구조 지원은 유지한다
 - `News`, `Publications`, `Service`는 여전히 비활성 상태다
+- `Dark mode`는 제거 상태를 유지한다
 
 ## 7. 구현 후 확인할 것
 
 - 홈에서 `About / Notes` 버튼이 사라졌는가
 - 프로필 영역이 카드가 아니라 본문형 섹션처럼 보이는가
-- `Notes {#notes}`가 아니라 `Notes`만 보이는가
+- 중앙 `Notes` 단락이 더 이상 보이지 않는가
+- 연구 관심사 라벨 2개가 reference 위치와 비슷하게 보이는가
 - 왼쪽 `Notes` 버튼이 실제로 접히고 펼쳐지는가
 - `Datascience`와 더 깊은 폴더 구조가 여전히 정상 탐색되는가
