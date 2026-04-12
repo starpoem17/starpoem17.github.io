@@ -5,20 +5,15 @@
   --panel-muted: rgba(92, 85, 76, 0.9);
   --surface-soft: rgba(245, 240, 232, 0.82);
   --surface-accent: rgba(132, 165, 157, 0.16);
+  --button-surface: rgba(245, 240, 232, 0.56);
 }
 
-.page article.home-page,
 .page article.section-page {
   max-width: 46rem;
 }
 
-.page article.home-page {
-  max-width: 55rem;
-  font-size: 0.98rem;
-}
-
 .left.sidebar {
-  gap: 0.9rem;
+  gap: 1rem;
 }
 
 .left.sidebar .search {
@@ -37,32 +32,68 @@
   border-color: var(--secondary);
 }
 
+body[data-slug="index"] .page article.home-page {
+  max-width: 61.5rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 1200px) {
+  body[data-slug="index"] .page > #quartz-body {
+    grid-template-columns: minmax(15.5rem, 17.75rem) minmax(0, 1fr);
+    grid-template-areas:
+      "grid-sidebar-left grid-header"
+      "grid-sidebar-left grid-center"
+      "grid-sidebar-left grid-footer";
+    column-gap: clamp(2.25rem, 3.8vw, 4.25rem);
+  }
+
+  body[data-slug="index"] .right.sidebar {
+    display: none;
+  }
+
+  body[data-slug="index"] .left.sidebar {
+    padding-inline-start: clamp(2.5rem, 4vw, 4rem);
+    padding-inline-end: clamp(1.1rem, 2vw, 1.75rem);
+  }
+}
+
+@media (min-width: 801px) and (max-width: 1199px) {
+  body[data-slug="index"] .page article.home-page {
+    max-width: 54rem;
+  }
+
+  body[data-slug="index"] .left.sidebar {
+    padding-inline-start: clamp(1.5rem, 3vw, 2.5rem);
+    padding-inline-end: 1rem;
+  }
+}
+
 .about-me {
-  padding: 0.55rem 0 1.2rem;
+  padding: 0.45rem 0 1.55rem;
 }
 
 .about-me h1 {
-  margin: 0 0 1.7rem;
-  font-size: clamp(1.95rem, 3.4vw, 2.45rem);
+  margin: 0 0 1.85rem;
+  font-size: clamp(1.9rem, 3.2vw, 2.35rem);
   font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  line-height: 1.1;
+  letter-spacing: -0.012em;
 }
 
 .about-me__intro {
   display: flex;
   align-items: flex-start;
-  gap: 2rem;
-  flex-wrap: wrap;
+  gap: clamp(1.5rem, 2.6vw, 2.4rem);
+  flex-wrap: nowrap;
   width: 100%;
-  margin-top: 0.38rem;
+  margin-top: 0.5rem;
 }
 
 .about-me__media {
   display: flex;
   justify-content: flex-start;
   flex: 0 0 10rem;
-  margin-top: -0.1rem;
+  margin-top: 0.12rem;
 }
 
 .profile-photo {
@@ -77,35 +108,40 @@
 
 .about-me__content {
   display: grid;
-  gap: 1.15rem;
+  gap: 1.28rem;
   align-content: start;
-  flex: 1;
-  min-width: 16.25rem;
-  padding-top: 0.46rem;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 46rem;
+  padding-top: 0.12rem;
 }
 
 .about-me__content h2 {
   margin: 0;
-  font-size: clamp(1.82rem, 3vw, 2.15rem);
+  font-size: clamp(1.78rem, 2.8vw, 2.08rem);
   font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.015em;
+  line-height: 1.07;
+  letter-spacing: -0.018em;
 }
 
 .about-me__role {
-  margin: -0.35rem 0 0;
+  margin: -0.7rem 0 0;
   color: var(--panel-muted);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 400;
-  line-height: 1.55;
+  line-height: 1.65;
+  letter-spacing: 0.014em;
 }
 
 .about-me__copy {
   display: grid;
-  gap: 0.88rem;
+  gap: 0.96rem;
+  max-inline-size: 39rem;
   color: var(--darkgray);
-  font-size: 0.97rem;
-  line-height: 1.92;
+  font-size: 1rem;
+  line-height: 1.96;
+  letter-spacing: 0.008em;
+  text-wrap: pretty;
 }
 
 .about-me__copy p {
@@ -114,21 +150,23 @@
 
 .about-me__focus {
   display: grid;
-  gap: 0.58rem;
-  margin-top: 0.2rem;
+  gap: 0.72rem;
+  margin-top: 0.08rem;
 }
 
 .about-me__focus-lead {
   margin: 0;
   color: var(--darkgray);
-  font-size: 0.92rem;
-  line-height: 1.7;
+  max-inline-size: 37rem;
+  font-size: 0.93rem;
+  line-height: 1.72;
+  letter-spacing: 0.005em;
 }
 
 .research-tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.48rem 0.58rem;
+  gap: 0.6rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -137,50 +175,68 @@
 .research-tag {
   display: inline-flex;
   align-items: center;
-  padding: 0.22rem 0.72rem;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 0 0.86rem;
   border: 1px solid var(--lightgray);
   border-radius: 999px;
   background: var(--surface-accent);
   color: var(--dark);
-  font-size: 0.82rem;
-  font-weight: 400;
-  line-height: 1.2;
+  font-size: 0.83rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.012em;
+  white-space: nowrap;
 }
 
 .about-me__links {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 0.68rem;
-  margin-top: 0.5rem;
-  width: min(100%, 33rem);
-  align-self: center;
+  gap: 0.62rem;
+  margin-top: 0.28rem;
+  width: min(100%, 36rem);
+  align-self: stretch;
 }
 
 .profile-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  min-width: 0;
-  padding: 0.44rem 0.92rem;
+  flex: 1 1 8rem;
+  min-width: 8rem;
+  max-width: 8.85rem;
+  min-height: 2.4rem;
+  padding: 0.52rem 0.95rem;
   border: 1px solid var(--lightgray);
-  border-radius: 0.28rem;
-  background: transparent;
-  color: var(--dark);
+  border-radius: 0.38rem;
+  background: var(--button-surface);
+  color: var(--darkgray);
   font-size: 0.88rem;
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: 0.008em;
+  line-height: 1;
   text-decoration: none;
+  white-space: nowrap;
   transition:
     border-color 140ms ease,
     color 140ms ease,
     background-color 140ms ease;
 }
 
+.profile-link .external-icon {
+  display: none;
+}
+
 .profile-link:hover {
   border-color: var(--secondary);
-  background: rgba(40, 75, 99, 0.03);
+  background: rgba(40, 75, 99, 0.04);
   color: var(--secondary);
+}
+
+.profile-link:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
 }
 
 .explorer {
@@ -245,20 +301,21 @@
 }
 
 @media (max-width: 1200px) {
-  .page article.home-page {
-    max-width: 50rem;
-  }
-
   .page article.section-page {
     max-width: 42rem;
   }
 }
 
 @media (max-width: 800px) {
+  body[data-slug="index"] .page article.home-page {
+    max-width: 100%;
+  }
+
   .about-me__intro {
     gap: 1.35rem;
     flex-direction: column;
     align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   .about-me__media {
@@ -278,11 +335,17 @@
 
   .about-me__content {
     padding-top: 0;
+    max-width: 100%;
+    gap: 1.18rem;
   }
 
   .about-me__links {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: flex-start;
     width: min(100%, 24rem);
+  }
+
+  .profile-link {
+    flex-basis: calc(50% - 0.31rem);
+    max-width: none;
   }
 }
