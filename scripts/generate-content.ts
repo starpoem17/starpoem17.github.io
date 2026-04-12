@@ -132,7 +132,8 @@ function assetSourcePathToOutputRelativePath(sourceRelativePath: string): string
   const normalized = toPosix(sourceRelativePath)
   const parsed = path.posix.parse(normalized)
   const folderSegments = parsed.dir.split("/").filter(Boolean).map(slugifySegment)
-  return path.posix.join(...folderSegments, parsed.base)
+  const assetBasename = `${slugifySegment(parsed.name)}${parsed.ext}`
+  return path.posix.join(...folderSegments, assetBasename)
 }
 
 function buildFrontmatter(note: NoteEntry, description: string, date: string): string {
@@ -271,6 +272,28 @@ function buildNoteLookup(notes: NoteEntry[]) {
   return { basenameMap, stemMap }
 }
 
+function resolveAssetLink(
+  rawTarget: string,
+  assetMap: Map<string, { sourcePath: string; outputRelativePath: string }>,
+): string | null {
+  if (
+    rawTarget.startsWith("http://") ||
+    rawTarget.startsWith("https://") ||
+    rawTarget.startsWith("data:")
+  ) {
+    return null
+  }
+
+  const [targetPath] = rawTarget.split(/[?#]/, 1)
+  const assetName = path.basename(targetPath.trim())
+  const asset = assetMap.get(assetName)
+  if (!asset) {
+    return null
+  }
+
+  return ensureRelativeLink(asset.outputRelativePath)
+}
+
 function resolveWikiLinkTarget(
   rawTarget: string,
   currentNote: NoteEntry,
@@ -387,15 +410,16 @@ async function main(): Promise<void> {
           throw new Error(`Missing embedded asset "${assetName}" in ${note.sourceRelativePath}`)
         }
 
-        const relativePath = ensureRelativeLink(
-          toPosix(
-            path.relative(
-              path.dirname(outputPath),
-              path.join(CONTENT_ROOT, asset.outputRelativePath),
-            ),
-          ),
-        )
+        const relativePath = ensureRelativeLink(asset.outputRelativePath)
         return `![](${relativePath})`
+      })
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, altText: string, rawTarget: string) => {
+        const relativePath = resolveAssetLink(rawTarget, assetMap)
+        if (!relativePath) {
+          return match
+        }
+
+        return `![${altText}](${relativePath})`
       })
       .replace(/(?<!!)\[\[([^\]]+)\]\]/g, (_match, rawTarget: string) => {
         const [targetPart, alias] = rawTarget.split("|")

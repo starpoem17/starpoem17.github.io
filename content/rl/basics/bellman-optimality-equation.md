@@ -85,4 +85,4 @@ $Q^\pi (s,a) = \mathbb E [R_{t+1} + \gamma (0.5 \cdot 3 + 0.5 \cdot 10)]$
 # 이걸 어디다가 쓰냐
 
 강화학습 시 모델이 추종해야 할 타겟으로 쓰일 수 있다.
-[Q-Learning](./q-learning.md)
+[Q-Learning](../value-based/q-learning.md)

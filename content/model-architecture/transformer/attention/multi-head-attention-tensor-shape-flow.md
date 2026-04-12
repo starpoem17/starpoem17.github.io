@@ -1,17 +1,15 @@
 ---
-title: 'Multi Head Attention - Tensor 차원 흐름'
+title: 'Multi Head Attention - Tensor Shape Flow'
 description: '사전학습 시'
 draft: false
-date: 2026-03-28
+date: 2026-04-12
 tags:
   - "notes"
   - 'model-architecture'
 topSection: 'Model Architecture'
 ---
 
-
-
-사전학습 시
+# 사전학습 시
 
 seq_len = 사전학습 시 모델에 한 번에 입력할 토큰 길이
 
@@ -44,7 +42,7 @@ W_O = nn.Linear(dim, embed_dim) 통과시키고 (B, seq_len, embed_dim) 만들�
 
 ---
 
-추론 시
+# 추론 시
 
 curr_len = 현재 스텝에서 입력되는 토큰 길이
 

@@ -17,22 +17,22 @@ RNN은 vanishing gradient 현상으로 인해 자연어 처리 시 긴 문맥을
 
 
 
-![](./figures/Pasted image 20260327222814.png)
+![](./model-architecture/rnn/figures/pasted-image-20260327222814.png)
 위와 같이 gradient saturation 현상을 보이는 tanh를 activation function으로 사용하는 전통적인 바닐라 RNN에게 있어 gradient vanishing problem은 필연적이다.
 
 
 
-![](./figures/Pasted image 20260327222932.png)
+![](./model-architecture/rnn/figures/pasted-image-20260327222932.png)
 Vanilla RNN과 LSTM의 그림을 통한 단순한 비교. LSTM은 hidden state 외에도 c라고 하는 입출력이 하나 추가되었다. 이 c는 memory cell(또다른 표현으로는 cell state, 기억 셀)이라 불리며 LSTM만의 기억 메커니즘으로 동작한다. 특징으로는 cell state의 값은 LSTM 계층 내에서만 주고받는다는 것이다. hidden state는 출력층 W_hy의 입력으로 사용될 수도 있지만 cell state 값은 내부 상태로만 쓰이고 외부에 연결되지 않는다.
 
 
 
-![](./figures/Pasted image 20260327225129.png)
+![](./model-architecture/rnn/figures/pasted-image-20260327225129.png)
 LSTM을 정말 간단화한 그림. 중요한 점은 c를 입력으로 하여 어떤 계산을 거치면 h가 된다는 것. LSTM에서 c는 장기 기억(long term), h는 단기 기억(short term)을 담당한다. 각각 장기, 단기로 나뉘는 이유는 후술.
 
 
 
-![](./figures/Pasted image 20260328174921.png)
+![](./model-architecture/rnn/figures/pasted-image-20260328174921.png)
 이 그림을 바탕으로 LSTM을 정복해보자.
 
 Forget gate

@@ -1,5 +1,5 @@
 github pages에 개인 소개와 공부한 내용을 덧붙인다.
-공부한 내용은 obsidian/ 안에 md 파일 형태로 있어 home 화면에서 내가 누구인지 간략히 확인할 수 있고 quartz로 처리된 md 파일에 접근해 내가 무엇을 공부했는지 확인할 수 있다.
+공부한 내용은 obsidian/ 안에 md 파일 형태로 있어 home 화면에서 내가 누구인지 간략히 확인할 수 있고 quartz로 처리된 md 파일에 접근해 내가 무엇을 공부했는지 확인할 수 있다. obsidian/ 안의 원문은 절대 수정하지 않으며 content/ 안에 가공된 형태로 저장한다.
 
 personal
 plans
