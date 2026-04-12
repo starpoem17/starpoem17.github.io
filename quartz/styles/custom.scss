@@ -38,7 +38,7 @@
 }
 
 .about-me {
-  padding: 0.4rem 0 1.2rem;
+  padding: 0.55rem 0 1.2rem;
 }
 
 .about-me h1 {
@@ -50,33 +50,38 @@
 }
 
 .about-me__intro {
-  display: grid;
-  grid-template-columns: 7.75rem minmax(0, 1fr);
-  gap: 1.15rem;
-  align-items: start;
-  margin-top: 0.3rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 0.38rem;
 }
 
 .about-me__media {
   display: flex;
   justify-content: flex-start;
-  margin-top: -0.18rem;
+  flex: 0 0 10rem;
+  margin-top: -0.1rem;
 }
 
 .profile-photo {
   display: block;
-  width: min(100%, 7.75rem);
+  width: 10rem;
+  height: 10rem;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid var(--lightgray);
+  border: 3px solid var(--lightgray);
 }
 
 .about-me__content {
   display: grid;
   gap: 1.15rem;
   align-content: start;
-  padding-top: 0.52rem;
+  flex: 1;
+  min-width: 16.25rem;
+  padding-top: 0.46rem;
 }
 
 .about-me__content h2 {
@@ -101,7 +106,6 @@
   color: var(--darkgray);
   font-size: 0.97rem;
   line-height: 1.92;
-  max-width: 42rem;
 }
 
 .about-me__copy p {
@@ -145,17 +149,20 @@
 
 .about-me__links {
   display: grid;
-  grid-template-columns: repeat(4, max-content);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   justify-content: center;
   gap: 0.68rem;
   margin-top: 0.5rem;
+  width: min(100%, 33rem);
+  align-self: center;
 }
 
 .profile-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 5.65rem;
+  width: 100%;
+  min-width: 0;
   padding: 0.44rem 0.92rem;
   border: 1px solid var(--lightgray);
   border-radius: 0.28rem;
@@ -249,18 +256,20 @@
 
 @media (max-width: 800px) {
   .about-me__intro {
-    grid-template-columns: 1fr;
     gap: 1.35rem;
-    align-items: start;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .about-me__media {
     justify-content: flex-start;
     margin-top: 0;
+    flex-basis: auto;
   }
 
   .profile-photo {
-    width: min(8.75rem, 100%);
+    width: min(10rem, 100%);
+    height: auto;
   }
 
   .about-me h1 {
@@ -272,7 +281,8 @@
   }
 
   .about-me__links {
-    grid-template-columns: repeat(2, max-content);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: flex-start;
+    width: min(100%, 24rem);
   }
 }
