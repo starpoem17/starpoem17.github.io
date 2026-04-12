@@ -1,73 +1,98 @@
 @use "./base.scss";
 
 :root {
-  --hero-border: rgba(21, 94, 117, 0.16);
-  --hero-shadow: rgba(19, 33, 48, 0.08);
-  --hero-muted: rgba(77, 74, 69, 0.78);
+  --panel-border: rgba(21, 94, 117, 0.14);
+  --panel-shadow: rgba(19, 33, 48, 0.08);
+  --panel-muted: rgba(77, 74, 69, 0.78);
 }
 
-.page article.home-page {
-  display: grid;
-  gap: 2rem;
+.page article.home-page,
+.page article.section-page {
+  max-width: 48rem;
 }
 
-.home-hero {
+.about-me {
   display: grid;
-  gap: 1rem;
-  padding: 2rem;
-  border: 1px solid var(--hero-border);
-  border-radius: 1.5rem;
+  grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  padding: 1.75rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 1.4rem;
   background:
-    radial-gradient(circle at top right, rgba(192, 127, 0, 0.16), transparent 30%),
+    radial-gradient(circle at top right, rgba(192, 127, 0, 0.14), transparent 30%),
     linear-gradient(135deg, rgba(21, 94, 117, 0.08), rgba(255, 255, 255, 0));
-  box-shadow: 0 24px 60px -36px var(--hero-shadow);
+  box-shadow: 0 24px 60px -36px var(--panel-shadow);
 }
 
-.home-eyebrow {
+.about-me__media {
+  display: flex;
+}
+
+.profile-photo {
+  width: 100%;
+  max-width: 15rem;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 1.15rem;
+  box-shadow: 0 20px 40px -30px rgba(0, 0, 0, 0.35);
+}
+
+.about-me__content {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.about-me__eyebrow {
   margin: 0;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--secondary);
+  color: var(--secondary) !important;
 }
 
-.home-hero h1 {
+.about-me__content h1 {
   margin: 0;
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
-  line-height: 0.95;
+  font-size: clamp(2.3rem, 5vw, 3.6rem);
+  line-height: 0.92;
 }
 
-.home-copy {
+.about-me__role {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.about-me__copy {
   display: grid;
   gap: 0.75rem;
-  max-width: 48rem;
-  color: var(--hero-muted);
+  color: var(--panel-muted);
 }
 
-.home-copy p {
+.about-me__copy p {
   margin: 0;
 }
 
-.home-links {
+.about-me__links {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
 
-.home-link,
-.category-card {
+.profile-link {
   transition:
     transform 140ms ease,
     box-shadow 140ms ease,
     border-color 140ms ease;
 }
 
-.home-link {
+.profile-link {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.72rem 1rem;
+  padding: 0.72rem 1.05rem;
   border: 1px solid var(--lightgray);
   border-radius: 999px;
   text-decoration: none;
@@ -75,50 +100,28 @@
   background: color-mix(in srgb, var(--light) 92%, white 8%);
 }
 
-.home-link:hover,
-.category-card:hover {
+.profile-link:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px -24px var(--hero-shadow);
+  box-shadow: 0 14px 30px -24px var(--panel-shadow);
   border-color: var(--secondary);
-}
-
-.category-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-}
-
-.category-card {
-  display: grid;
-  gap: 0.5rem;
-  padding: 1.1rem 1.2rem;
-  border: 1px solid var(--lightgray);
-  border-radius: 1rem;
-  text-decoration: none;
-  background: color-mix(in srgb, var(--light) 94%, white 6%);
-}
-
-.category-card h2 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.category-card p {
-  margin: 0;
-  color: var(--darkgray);
-  font-size: 0.95rem;
 }
 
 .explorer .title-button h2 {
   letter-spacing: 0.02em;
 }
 
-.page article.section-page {
-  max-width: 50rem;
+.explorer .explorer-content {
+  max-height: calc(100vh - 14rem);
+  overflow-y: auto;
 }
 
 @media (max-width: 800px) {
-  .home-hero {
-    padding: 1.4rem;
+  .about-me {
+    grid-template-columns: 1fr;
+    padding: 1.3rem;
+  }
+
+  .profile-photo {
+    max-width: 12rem;
   }
 }

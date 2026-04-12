@@ -1,19 +1,23 @@
-export type CategoryKey = "rl" | "rnn" | "transformer"
+import path from "node:path"
 
-export const SITE_TITLE = "Hwajoong Kim Notes"
+export const SITE_TITLE = "Hwajoong Kim"
 export const SITE_BASE_URL = "starpoem17.github.io"
 export const SITE_LOCALE = "en-US"
-export const SOURCE_VAULT_PATH = "obsidian/Datascience"
+
+export const SOURCE_OBSIDIAN_ROOT = "obsidian"
 export const GENERATED_CONTENT_PATH = "content"
-export const NOTES_ROOT_SLUG = "datascience"
+export const NOTES_ROOT_SLUG = "obsidian"
+
+export const PROFILE_IMAGE_SOURCE_PATH = "profile.jpg"
+export const PROFILE_IMAGE_OUTPUT_PATH = `${NOTES_ROOT_SLUG}/assets/profile.jpg`
 
 export const PROFILE = {
   name: "Hwajoong Kim",
   role: "AI/ML Researcher & Developer | Data Science",
   intro: [
-    "I study and build AI/ML systems with a focus on data science.",
-    "This site collects the notes I wrote while learning reinforcement learning, recurrent neural networks, and transformers.",
-    "It serves as a public archive of concepts I want to revisit, connect, and apply in practice.",
+    "I study and build AI/ML systems with a focus on machine learning, data science, and clear technical communication.",
+    "This site publishes the notes I keep in Obsidian and turns them into a browsable public knowledge base.",
+    "My goal is to make complex topics easier to revisit, connect, and extend over time.",
   ],
   githubUrl: "https://github.com/starpoem17",
   linkedInUrl: "https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/",
@@ -21,126 +25,97 @@ export const PROFILE = {
 } as const
 
 export const PROFILE_LINKS = [
-  { label: "GitHub", href: PROFILE.githubUrl },
-  { label: "LinkedIn", href: PROFILE.linkedInUrl },
   { label: "Email", href: `mailto:${PROFILE.email}` },
+  { label: "LinkedIn", href: PROFILE.linkedInUrl },
+  { label: "GitHub", href: PROFILE.githubUrl },
 ] as const
 
-export const CATEGORIES = [
+export const HOME_NOTES_HEADING = "Notes"
+export const HOME_NOTES_DESCRIPTION =
+  "Browse the note tree on the left. The structure follows the folders inside my Obsidian vault and is designed to scale to deeper hierarchies over time."
+
+export const SECTION_DEFINITIONS = [
   {
-    key: "rl" as const,
+    sourcePath: "Datascience",
+    title: "Datascience",
+    description:
+      "Notes on reinforcement learning, recurrent neural networks, transformers, and related machine learning topics.",
+  },
+] as const
+
+export const FOLDER_DEFINITIONS = [
+  {
+    sourcePath: "Datascience/RL",
     title: "RL",
-    sourceDir: "RL",
-    route: `${NOTES_ROOT_SLUG}/rl`,
     description:
       "Reinforcement learning notes on value functions, Bellman equations, exploration, and temporal-difference methods.",
   },
   {
-    key: "rnn" as const,
+    sourcePath: "Datascience/RNN",
     title: "RNN",
-    sourceDir: "RNN",
-    route: `${NOTES_ROOT_SLUG}/rnn`,
     description:
       "Recurrent network notes from vanilla RNNs and BPTT to bidirectional architectures, LSTMs, and sequence applications.",
   },
   {
-    key: "transformer" as const,
+    sourcePath: "Datascience/Transformer",
     title: "Transformer",
-    sourceDir: "Transformer",
-    route: `${NOTES_ROOT_SLUG}/transformer`,
     description:
       "Transformer implementation notes focused on multi-head attention and tensor-shape reasoning.",
   },
 ] as const
 
-export const NOTES = [
-  {
-    category: "rl" as const,
-    title: "Value Function",
-    slug: "value-function",
-    sourcePath: "RL/Value Function.md",
-  },
-  {
-    category: "rl" as const,
-    title: "Bellman Equation of V-function",
-    slug: "bellman-equation-of-v-function",
-    sourcePath: "RL/Bellman Equation of V-function.md",
-  },
-  {
-    category: "rl" as const,
-    title: "Bellman Equation of Q-function",
-    slug: "bellman-equation-of-q-function",
-    sourcePath: "RL/Bellman Equation of Q-function.md",
-  },
-  {
-    category: "rl" as const,
-    title: "Bellman Optimality Equation",
-    slug: "bellman-optimality-equation",
-    sourcePath: "RL/Bellman Optimality Equation.md",
-  },
-  {
-    category: "rl" as const,
-    title: "Exploration",
-    slug: "exploration",
-    sourcePath: "RL/Exploration.md",
-  },
-  {
-    category: "rl" as const,
-    title: "Temporal Difference",
-    slug: "temporal-difference",
-    sourcePath: "RL/Temporal Difference.md",
-  },
-  {
-    category: "rl" as const,
-    title: "SARSA",
-    slug: "sarsa",
-    sourcePath: "RL/SARSA.md",
-  },
-  {
-    category: "rl" as const,
-    title: "Q-Learning",
-    slug: "q-learning",
-    sourcePath: "RL/Q-Learning.md",
-  },
-  {
-    category: "rnn" as const,
-    title: "Vanilla RNN",
-    slug: "vanilla-rnn",
-    sourcePath: "RNN/Vanilla RNN.md",
-  },
-  {
-    category: "rnn" as const,
-    title: "BPTT",
-    slug: "bptt",
-    sourcePath: "RNN/BPTT.md",
-  },
-  {
-    category: "rnn" as const,
-    title: "Bidirectional-RNN",
-    slug: "bidirectional-rnn",
-    sourcePath: "RNN/Bidirectional-RNN.md",
-  },
-  {
-    category: "rnn" as const,
-    title: "LSTM",
-    slug: "lstm",
-    sourcePath: "RNN/LSTM.md",
-  },
-  {
-    category: "rnn" as const,
-    title: "RNN - 활용 방식",
-    slug: "rnn-applications",
-    sourcePath: "RNN/RNN - 활용 방식.md",
-  },
-  {
-    category: "transformer" as const,
-    title: "Multi Head Attention - Tensor 차원 흐름",
-    slug: "multi-head-attention-tensor-dimensions",
-    sourcePath: "Transformer/Multi Head Attention - Tensor 차원 흐름.md",
-  },
+export const MANUAL_NOTE_SOURCE_ORDER = [
+  "Datascience/RL/Value Function.md",
+  "Datascience/RL/Bellman Equation of V-function.md",
+  "Datascience/RL/Bellman Equation of Q-function.md",
+  "Datascience/RL/Bellman Optimality Equation.md",
+  "Datascience/RL/Exploration.md",
+  "Datascience/RL/Temporal Difference.md",
+  "Datascience/RL/SARSA.md",
+  "Datascience/RL/Q-Learning.md",
+  "Datascience/RNN/Vanilla RNN.md",
+  "Datascience/RNN/BPTT.md",
+  "Datascience/RNN/Bidirectional-RNN.md",
+  "Datascience/RNN/LSTM.md",
+  "Datascience/RNN/RNN - 활용 방식.md",
+  "Datascience/Transformer/Multi Head Attention - Tensor 차원 흐름.md",
 ] as const
 
-export const EXPLORER_CATEGORY_ORDER = CATEGORIES.map((category) => category.route)
-export const EXPLORER_NOTE_ORDER = NOTES.map(
-  (note) => `${NOTES_ROOT_SLUG}/${note.category}/${note.slug}`,
+function toPosix(value: string): string {
+  return value.split(path.sep).join(path.posix.sep)
+}
+
+export function slugifySegment(segment: string): string {
+  return segment
+    .trim()
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+}
+
+export function prettifySegment(segment: string): string {
+  return segment.replace(/[-_]/g, " ").trim() || segment
+}
+
+export function sourceFolderToSlug(folderPath: string): string {
+  const parts = toPosix(folderPath).split("/").filter(Boolean).map(slugifySegment)
+  return [NOTES_ROOT_SLUG, ...parts].join("/")
+}
+
+export function sourceNoteToSlug(noteSourcePath: string): string {
+  const normalizedSourcePath = toPosix(noteSourcePath)
+  const parsed = path.posix.parse(normalizedSourcePath)
+  const folderParts = parsed.dir.split("/").filter(Boolean).map(slugifySegment)
+  return [NOTES_ROOT_SLUG, ...folderParts, slugifySegment(parsed.name)].join("/")
+}
+
+export const SECTION_ORDER = SECTION_DEFINITIONS.map((section) =>
+  sourceFolderToSlug(section.sourcePath),
 )
+
+export const FOLDER_ORDER = FOLDER_DEFINITIONS.map((folder) =>
+  sourceFolderToSlug(folder.sourcePath),
+)
+export const NOTE_ORDER = MANUAL_NOTE_SOURCE_ORDER.map((note) => sourceNoteToSlug(note))

@@ -1,6 +1,6 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
-import { explorerSortFn, footerLinks } from "./quartz.custom"
+import { explorerFilterFn, explorerSortFn, explorerTitle, footerLinks } from "./quartz.custom"
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
@@ -36,10 +36,11 @@ export const defaultContentPageLayout: PageLayout = {
       ],
     }),
     Component.Explorer({
-      title: "Notes",
+      title: explorerTitle,
       folderClickBehavior: "link",
       folderDefaultState: "open",
       useSavedState: false,
+      filterFn: explorerFilterFn,
       sortFn: explorerSortFn,
     }),
   ],
@@ -62,10 +63,11 @@ export const defaultListPageLayout: PageLayout = {
       ],
     }),
     Component.Explorer({
-      title: "Notes",
+      title: explorerTitle,
       folderClickBehavior: "link",
       folderDefaultState: "open",
       useSavedState: false,
+      filterFn: explorerFilterFn,
       sortFn: explorerSortFn,
     }),
   ],
