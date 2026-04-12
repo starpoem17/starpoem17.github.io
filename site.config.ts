@@ -11,13 +11,13 @@ export const PROFILE_IMAGE_PUBLIC_PATH = "static/profile.jpg"
 
 export const PROFILE = {
   name: "Hwajoong Kim",
-  role: "AI/ML Researcher & Developer | Data Science",
+  role: "Undergraduate in Data Science at Hanyang University",
   intro: [
-    "I study and build AI/ML systems with a focus on machine learning, data science, and clear technical communication.",
-    "This site publishes the notes I keep in Obsidian and turns them into a browsable public knowledge base.",
+    "I am an undergraduate student at Hanyang University, where I study data science and currently explore robotics and embodied AI at BAIK LAB.",
+    "This site turns my Obsidian notes into a public knowledge base of what I am learning.",
     "My goal is to make complex topics easier to revisit, connect, and extend over time.",
   ],
-  focusLead: "My interests lie at the intersection of AI and systems, with a focus on:",
+  focusLead: "My interests lie in building agents that can perceive, reason, and act, with a focus on:",
   focusAreas: ["Multimodal", "Embodied AI"],
   githubUrl: "https://github.com/starpoem17",
   linkedInUrl: "https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/",
