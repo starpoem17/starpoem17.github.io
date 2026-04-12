@@ -156,7 +156,7 @@ const folderMetadata = new Map(FOLDER_METADATA.map((entry) => [toPosix(entry.sou
 function buildRootIndex(): string {
   const introParagraphs = PROFILE.intro.map((line) => `      <p>${line}</p>`).join("\n")
   const focusAreas = PROFILE.focusAreas
-    .map((area) => `        <li class="focus-area">${area}</li>`)
+    .map((area) => `          <li class="research-tag">${area}</li>`)
     .join("\n")
   const profileLinks = PROFILE_LINKS.map(
     (link) => `      <a href="${link.href}" class="profile-link">${link.label}</a>`,
@@ -174,7 +174,9 @@ cssclasses:
   <h1>About Me</h1>
   <div class="about-me__intro">
     <div class="about-me__media">
-      <img src="./${PROFILE_IMAGE_PUBLIC_PATH}" alt="${PROFILE.name}" class="profile-photo" />
+      <div class="about-me__portrait">
+        <img src="./${PROFILE_IMAGE_PUBLIC_PATH}" alt="${PROFILE.name}" class="profile-photo" />
+      </div>
     </div>
     <div class="about-me__content">
       <h2>${PROFILE.name}</h2>
@@ -184,7 +186,7 @@ ${introParagraphs}
       </div>
       <div class="about-me__focus">
         <p class="about-me__focus-lead">${PROFILE.focusLead}</p>
-        <ul class="focus-area-list">
+        <ul class="research-tag-list">
 ${focusAreas}
         </ul>
       </div>

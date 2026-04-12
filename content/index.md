@@ -10,7 +10,9 @@ cssclasses:
   <h1>About Me</h1>
   <div class="about-me__intro">
     <div class="about-me__media">
-      <img src="./static/profile.jpg" alt="Hwajoong Kim" class="profile-photo" />
+      <div class="about-me__portrait">
+        <img src="./static/profile.jpg" alt="Hwajoong Kim" class="profile-photo" />
+      </div>
     </div>
     <div class="about-me__content">
       <h2>Hwajoong Kim</h2>
@@ -22,12 +24,9 @@ cssclasses:
       </div>
       <div class="about-me__focus">
         <p class="about-me__focus-lead">My interests lie at the intersection of AI and systems, with a focus on:</p>
-        <ul class="focus-area-list">
-        <li class="focus-area">Efficient Foundation Models</li>
-        <li class="focus-area">Edge AI</li>
-        <li class="focus-area">Generative Models</li>
-        <li class="focus-area">Multimodal</li>
-        <li class="focus-area">Embodied AI</li>
+        <ul class="research-tag-list">
+          <li class="research-tag">Multimodal</li>
+          <li class="research-tag">Embodied AI</li>
         </ul>
       </div>
       <div class="about-me__links">
