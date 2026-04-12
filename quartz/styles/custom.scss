@@ -3,12 +3,12 @@
 :root {
   --panel-border: rgba(31, 36, 48, 0.12);
   --panel-muted: rgba(77, 74, 69, 0.82);
-  --surface-soft: rgba(255, 255, 255, 0.45);
+  --surface-soft: rgba(255, 255, 255, 0.42);
 }
 
 .page article.home-page,
 .page article.section-page {
-  max-width: 46rem;
+  max-width: 47rem;
 }
 
 .left.sidebar {
@@ -31,29 +31,22 @@
   padding: 0.55rem;
 }
 
-.home-nav {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--panel-border);
-  font-size: 0.95rem;
-}
-
-.home-nav a {
-  color: var(--secondary);
-  font-weight: 600;
-  text-decoration: none;
-}
-
 .about-me {
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.about-me h1 {
+  margin: 0 0 1.4rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1;
+}
+
+.about-me__intro {
   display: grid;
-  grid-template-columns: minmax(10rem, 12rem) minmax(0, 1fr);
+  grid-template-columns: minmax(10rem, 11.5rem) minmax(0, 1fr);
   gap: 1.5rem;
   align-items: start;
-  padding-bottom: 1.9rem;
-  border-bottom: 1px solid var(--panel-border);
 }
 
 .about-me__media {
@@ -62,10 +55,10 @@
 
 .profile-photo {
   width: 100%;
-  max-width: 12rem;
+  max-width: 11.5rem;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  border-radius: 1rem;
+  border-radius: 0.9rem;
   border: 1px solid var(--lightgray);
 }
 
@@ -74,25 +67,15 @@
   gap: 0.8rem;
 }
 
-.about-me__eyebrow {
+.about-me__content h2 {
   margin: 0;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--secondary) !important;
-}
-
-.about-me__content h1 {
-  margin: 0;
-  font-size: clamp(2.15rem, 5vw, 3.2rem);
-  line-height: 0.95;
+  font-size: clamp(1.55rem, 4vw, 2.2rem);
+  line-height: 1.05;
 }
 
 .about-me__role {
   margin: 0;
   color: var(--panel-muted);
-  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -110,14 +93,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
-  padding-top: 0.1rem;
+  padding-top: 0.15rem;
 }
 
 .profile-link {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.62rem 0.95rem;
+  padding: 0.6rem 0.95rem;
   border: 1px solid var(--lightgray);
   border-radius: 999px;
   background: transparent;
@@ -136,7 +119,7 @@
   transform: translateY(-1px);
 }
 
-.home-page h2#notes {
+.home-page h2 {
   margin-top: 1.7rem;
 }
 
@@ -156,6 +139,7 @@
 .explorer {
   padding-top: 0.9rem;
   border-top: 1px solid var(--panel-border);
+  transition: min-height 180ms ease;
 }
 
 .explorer .title-button {
@@ -204,8 +188,30 @@
   color: var(--tertiary);
 }
 
+@media (min-width: 801px) {
+  .explorer.collapsed {
+    min-height: 2rem;
+  }
+
+  .explorer.collapsed > .explorer-content {
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
+    pointer-events: none;
+    padding-right: 0;
+  }
+
+  .explorer:not(.collapsed) > .explorer-content {
+    opacity: 1;
+    transition:
+      max-height 180ms ease,
+      opacity 180ms ease,
+      margin-top 180ms ease;
+  }
+}
+
 @media (max-width: 800px) {
-  .about-me {
+  .about-me__intro {
     grid-template-columns: 1fr;
   }
 

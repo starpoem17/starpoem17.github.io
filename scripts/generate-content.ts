@@ -187,29 +187,26 @@ cssclasses:
   - home-page
 ---
 
-<nav class="home-nav">
-  <a href="#about">About</a>
-  <a href="#notes">Notes</a>
-</nav>
-
-<section id="about" class="about-me">
-  <div class="about-me__media">
-    <img src="./${PROFILE_IMAGE_PUBLIC_PATH}" alt="${PROFILE.name}" class="profile-photo" />
-  </div>
-  <div class="about-me__content">
-    <p class="about-me__eyebrow">About me</p>
-    <h1>${PROFILE.name}</h1>
-    <p class="about-me__role">${PROFILE.role}</p>
-    <div class="about-me__copy">
-${introParagraphs}
+<section class="about-me">
+  <h1>About Me</h1>
+  <div class="about-me__intro">
+    <div class="about-me__media">
+      <img src="./${PROFILE_IMAGE_PUBLIC_PATH}" alt="${PROFILE.name}" class="profile-photo" />
     </div>
-    <div class="about-me__links">
+    <div class="about-me__content">
+      <h2>${PROFILE.name}</h2>
+      <p class="about-me__role">${PROFILE.role}</p>
+      <div class="about-me__copy">
+${introParagraphs}
+      </div>
+      <div class="about-me__links">
 ${profileLinks}
+      </div>
     </div>
   </div>
 </section>
 
-## ${HOME_NOTES_HEADING} {#notes}
+## ${HOME_NOTES_HEADING}
 
 ${HOME_NOTES_DESCRIPTION}
 
