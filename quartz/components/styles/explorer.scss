@@ -21,9 +21,6 @@
       margin: 0;
     }
 
-    .hide-until-loaded ~ .explorer-content {
-      display: none;
-    }
   }
 }
 
@@ -98,6 +95,7 @@ button.mobile-explorer,
   background-color: transparent;
   border: none;
   text-align: left;
+  cursor: pointer;
   padding: 0;
   color: var(--dark);
   display: flex;
@@ -108,6 +106,12 @@ button.mobile-explorer,
     display: inline-block;
     margin: 0;
   }
+
+  & .fold {
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+    opacity: 0.8;
+  }
 }
 
 .explorer-content {
@@ -115,6 +119,12 @@ button.mobile-explorer,
   overflow: hidden;
   overflow-y: auto;
   margin-top: 0.5rem;
+  max-height: none;
+  visibility: visible;
+  transition:
+    max-height 0.3s ease,
+    visibility 0s linear 0s,
+    margin-top 0.3s ease;
 
   & ul {
     list-style: none;
@@ -156,6 +166,18 @@ button.mobile-explorer,
     margin-left: 6px;
     padding-left: 0.8rem;
     border-left: 1px solid var(--lightgray);
+  }
+}
+
+@media all and not ($mobile) {
+  .explorer.collapsed > .explorer-content {
+    max-height: 0;
+    margin-top: 0;
+    visibility: hidden;
+    transition:
+      max-height 0.3s ease,
+      visibility 0s linear 0.3s,
+      margin-top 0.3s ease;
   }
 }
 
@@ -274,6 +296,8 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
 
 .mobile-no-scroll {
   @media all and ($mobile) {
+    overflow: hidden;
+
     .explorer-content > .explorer-ul {
       overscroll-behavior: contain;
     }

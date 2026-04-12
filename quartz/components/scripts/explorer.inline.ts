@@ -20,21 +20,38 @@ type FolderState = {
 }
 
 let currentExplorerState: Array<FolderState>
-function toggleExplorer(this: HTMLElement) {
-  const nearestExplorer = this.closest(".explorer") as HTMLElement
-  if (!nearestExplorer) return
-  const explorerCollapsed = nearestExplorer.classList.toggle("collapsed")
-  nearestExplorer.setAttribute(
-    "aria-expanded",
-    nearestExplorer.getAttribute("aria-expanded") === "true" ? "false" : "true",
-  )
+const mobileMediaQuery = "(max-width: 800px)"
 
-  if (!explorerCollapsed) {
-    // Stop <html> from being scrollable when mobile explorer is open
-    document.documentElement.classList.add("mobile-no-scroll")
+function isMobileViewport(): boolean {
+  return window.matchMedia(mobileMediaQuery).matches
+}
+
+function setExplorerExpanded(explorer: HTMLElement, expanded: boolean) {
+  explorer.classList.toggle("collapsed", !expanded)
+  explorer.setAttribute("aria-expanded", expanded ? "true" : "false")
+
+  const content = explorer.querySelector(".explorer-content") as MaybeHTMLElement
+  content?.setAttribute("aria-expanded", expanded ? "true" : "false")
+
+  const explorerButtons = explorer.getElementsByClassName(
+    "explorer-toggle",
+  ) as HTMLCollectionOf<HTMLElement>
+  for (const button of explorerButtons) {
+    button.setAttribute("aria-expanded", expanded ? "true" : "false")
+  }
+
+  if (isMobileViewport()) {
+    document.documentElement.classList.toggle("mobile-no-scroll", expanded)
   } else {
     document.documentElement.classList.remove("mobile-no-scroll")
   }
+}
+
+function toggleExplorer(this: HTMLElement) {
+  const nearestExplorer = this.closest(".explorer") as HTMLElement
+  if (!nearestExplorer) return
+  const expanded = nearestExplorer.classList.contains("collapsed")
+  setExplorerExpanded(nearestExplorer, expanded)
 }
 
 function toggleFolder(evt: MouseEvent) {
@@ -209,6 +226,13 @@ async function setupExplorer(currentSlug: FullSlug) {
     const explorerUl = explorer.querySelector(".explorer-ul")
     if (!explorerUl) continue
 
+    // Clear previously rendered file nodes on SPA navigations.
+    for (const node of [...explorerUl.children]) {
+      if (!node.classList.contains("overflow-end")) {
+        node.remove()
+      }
+    }
+
     // Create and insert new content
     const fragment = document.createDocumentFragment()
     for (const child of trie.children) {
@@ -218,7 +242,8 @@ async function setupExplorer(currentSlug: FullSlug) {
 
       fragment.appendChild(node)
     }
-    explorerUl.insertBefore(fragment, explorerUl.firstChild)
+    const overflowEnd = explorerUl.querySelector(".overflow-end")
+    explorerUl.insertBefore(fragment, overflowEnd)
 
     // restore explorer scrollTop position if it exists
     const scrollTop = sessionStorage.getItem("explorerScrollTop")
@@ -273,30 +298,15 @@ document.addEventListener("nav", async (e: CustomEventMap["nav"]) => {
   const currentSlug = e.detail.url
   await setupExplorer(currentSlug)
 
-  // if mobile hamburger is visible, collapse by default
   for (const explorer of document.getElementsByClassName("explorer")) {
-    const mobileExplorer = explorer.querySelector(".mobile-explorer")
-    if (!mobileExplorer) return
-
-    if (mobileExplorer.checkVisibility()) {
-      explorer.classList.add("collapsed")
-      explorer.setAttribute("aria-expanded", "false")
-
-      // Allow <html> to be scrollable when mobile explorer is collapsed
-      document.documentElement.classList.remove("mobile-no-scroll")
-    }
-
-    mobileExplorer.classList.remove("hide-until-loaded")
+    setExplorerExpanded(explorer as HTMLElement, !isMobileViewport())
   }
 })
 
 window.addEventListener("resize", function () {
-  // Desktop explorer opens by default, and it stays open when the window is resized
-  // to mobile screen size. Applies `no-scroll` to <html> in this edge case.
-  const explorer = document.querySelector(".explorer")
-  if (explorer && !explorer.classList.contains("collapsed")) {
-    document.documentElement.classList.add("mobile-no-scroll")
-    return
+  const allExplorers = document.querySelectorAll(".explorer") as NodeListOf<HTMLElement>
+  for (const explorer of allExplorers) {
+    setExplorerExpanded(explorer, !isMobileViewport())
   }
 })
 
