@@ -16,7 +16,7 @@ cssclasses:
       <h2>Hwajoong Kim</h2>
       <p class="home-role">Undergraduate in Data Science at Hanyang University</p>
       <div class="home-bio">
-      <p>I am an undergraduate student at Hanyang University, where I study data science and currently explore robotics and embodied AI at BAIK LAB.</p>
+      <p>Currently exploring robotics and embodied AI at BAIK LAB.</p>
       <p>This site turns my Obsidian notes into a public knowledge base of what I am learning. My goal is to make complex topics easier to revisit, connect, and extend over time.</p>
       </div>
       <p class="home-interest-lead">My interests lie in agents that can perceive, reason, and act, with a focus on:</p>

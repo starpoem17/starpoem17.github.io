@@ -13,7 +13,7 @@ export const PROFILE = {
   name: "Hwajoong Kim",
   role: "Undergraduate in Data Science at Hanyang University",
   intro: [
-    "I am an undergraduate student at Hanyang University, where I study data science and currently explore robotics and embodied AI at BAIK LAB.",
+    "Currently exploring robotics and embodied AI at BAIK LAB.",
     "This site turns my Obsidian notes into a public knowledge base of what I am learning. My goal is to make complex topics easier to revisit, connect, and extend over time.",
   ],
   focusLead: "My interests lie in agents that can perceive, reason, and act, with a focus on:",
