@@ -1,13 +1,16 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
+import type { QuartzComponent } from "./quartz/components/types"
 import { explorerFilterFn, explorerSortFn, explorerTitle } from "./quartz.custom"
+
+const EmptyFooter: QuartzComponent = () => null
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [],
-  footer: Component.Footer(),
+  footer: EmptyFooter,
 }
 
 // components for pages that display a single page (e.g. a single note)
