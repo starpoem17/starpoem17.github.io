@@ -174,9 +174,7 @@ cssclasses:
   <h1>About Me</h1>
   <div class="about-me__intro">
     <div class="about-me__media">
-      <div class="about-me__portrait">
-        <img src="./${PROFILE_IMAGE_PUBLIC_PATH}" alt="${PROFILE.name}" class="profile-photo" />
-      </div>
+      <img src="./${PROFILE_IMAGE_PUBLIC_PATH}" alt="${PROFILE.name}" class="profile-photo" />
     </div>
     <div class="about-me__content">
       <h2>${PROFILE.name}</h2>

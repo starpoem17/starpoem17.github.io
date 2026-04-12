@@ -10,9 +10,7 @@ cssclasses:
   <h1>About Me</h1>
   <div class="about-me__intro">
     <div class="about-me__media">
-      <div class="about-me__portrait">
-        <img src="./static/profile.jpg" alt="Hwajoong Kim" class="profile-photo" />
-      </div>
+      <img src="./static/profile.jpg" alt="Hwajoong Kim" class="profile-photo" />
     </div>
     <div class="about-me__content">
       <h2>Hwajoong Kim</h2>
