@@ -20,7 +20,7 @@ cssclasses:
       <p>This site turns my Obsidian notes into a public knowledge base of what I am learning.</p>
       <p>My goal is to make complex topics easier to revisit, connect, and extend over time.</p>
       </div>
-      <p class="home-interest-lead">My interests lie in building agents that can perceive, reason, and act, with a focus on:</p>
+      <p class="home-interest-lead">My interests lie in agents that can perceive, reason, and act, with a focus on:</p>
     </div>
     <div class="home-interests" aria-label="Research interests">
           <span class="home-interest-pill">Multimodal</span>

@@ -17,7 +17,7 @@ export const PROFILE = {
     "This site turns my Obsidian notes into a public knowledge base of what I am learning.",
     "My goal is to make complex topics easier to revisit, connect, and extend over time.",
   ],
-  focusLead: "My interests lie in building agents that can perceive, reason, and act, with a focus on:",
+  focusLead: "My interests lie in agents that can perceive, reason, and act, with a focus on:",
   focusAreas: ["Multimodal", "Embodied AI"],
   githubUrl: "https://github.com/starpoem17",
   linkedInUrl: "https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/",
