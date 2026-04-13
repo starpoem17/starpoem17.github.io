@@ -2,8 +2,10 @@ import assert from "node:assert"
 import test, { describe } from "node:test"
 import {
   assertNoBrokenMathHeadings,
+  buildRelativeAssetLink,
   extractDescription,
   normalizeBrokenMathHeadings,
+  rewriteAssetLinks,
 } from "./generate-content"
 
 describe("normalizeBrokenMathHeadings", () => {
@@ -104,5 +106,97 @@ describe("extractDescription", () => {
       extractDescription(markdown),
       "Bellman Equation explains recursive value decomposition.",
     )
+  })
+})
+
+describe("buildRelativeAssetLink", () => {
+  test("builds note-relative links for nested note assets", () => {
+    assert.strictEqual(
+      buildRelativeAssetLink(
+        "model-architecture/transformer/paper-reading/sink-attention.md",
+        "model-architecture/transformer/figures/pasted-image-20260413003945.png",
+      ),
+      "../figures/pasted-image-20260413003945.png",
+    )
+  })
+})
+
+describe("rewriteAssetLinks", () => {
+  test("rewrites Obsidian image embeds to note-relative markdown image links", () => {
+    const assetMap = new Map([
+      [
+        "Pasted image 20260413003945.png",
+        {
+          sourcePath: "obsidian/Model Architecture/Transformer/figures/Pasted image 20260413003945.png",
+          outputRelativePath:
+            "model-architecture/transformer/figures/pasted-image-20260413003945.png",
+        },
+      ],
+    ])
+
+    const rewritten = rewriteAssetLinks(
+      "![[Pasted image 20260413003945.png]]",
+      {
+        sourceRelativePath: "Model Architecture/Transformer/paper reading/Sink Attention.md",
+        outputRelativePath: "model-architecture/transformer/paper-reading/sink-attention.md",
+      },
+      assetMap,
+    )
+
+    assert.strictEqual(rewritten, "![](../figures/pasted-image-20260413003945.png)")
+  })
+
+  test("rewrites markdown image links to note-relative paths", () => {
+    const assetMap = new Map([
+      [
+        "pasted-image-20260413003945.png",
+        {
+          sourcePath:
+            "content/model-architecture/transformer/figures/pasted-image-20260413003945.png",
+          outputRelativePath:
+            "model-architecture/transformer/figures/pasted-image-20260413003945.png",
+        },
+      ],
+    ])
+
+    const rewritten = rewriteAssetLinks(
+      "![](./model-architecture/transformer/figures/pasted-image-20260413003945.png)",
+      {
+        sourceRelativePath: "content/model-architecture/transformer/paper-reading/sink-attention.md",
+        outputRelativePath: "model-architecture/transformer/paper-reading/sink-attention.md",
+      },
+      assetMap,
+    )
+
+    assert.strictEqual(rewritten, "![](../figures/pasted-image-20260413003945.png)")
+  })
+
+  test("throws when a local image target cannot be resolved", () => {
+    assert.throws(
+      () =>
+        rewriteAssetLinks(
+          "![](./model-architecture/transformer/figures/missing.png)",
+          {
+            sourceRelativePath:
+              "content/model-architecture/transformer/paper-reading/sink-attention.md",
+            outputRelativePath: "model-architecture/transformer/paper-reading/sink-attention.md",
+          },
+          new Map(),
+        ),
+      /Missing linked asset/,
+    )
+  })
+
+  test("keeps external image targets unchanged", () => {
+    const rewritten = rewriteAssetLinks(
+      "![remote](https://example.com/image.png)",
+      {
+        sourceRelativePath: "obsidian/Model Architecture/Transformer/paper reading/Sink Attention.md",
+        outputRelativePath: "model-architecture/transformer/paper-reading/sink-attention.md",
+      },
+      new Map(),
+    )
+
+    assert.strictEqual(rewritten, "![remote](https://example.com/image.png)")
   })
 })

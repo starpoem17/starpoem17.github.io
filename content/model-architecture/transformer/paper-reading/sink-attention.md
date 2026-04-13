@@ -20,7 +20,7 @@ Sliding Window Attention은 자연스러운 해결책처럼 보이지만 본 연
 
 이때 저자들이 관찰한 현상이 바로 Attention Sink이다. 직관적으로는 attention score가 후반부 토큰에 높게 나타나야 할 것 같지만(다음 토큰 예측에 있어서 10만 토큰 이전의 단어보다는 같은 문장 안의 가까운 단어가 영향력이 클 것 같다는 직관.) 모델이 의미적으로 중요하지 않아도 초반 몇 개 토큰에 비정상적일 정도로 큰 attention score를 몰아주는 경향이 나타난다.
 
-![](./model-architecture/transformer/figures/pasted-image-20260413003945.png)
+![](../figures/pasted-image-20260413003945.png)
 위 그림을 보면 초반 레이어에서는 인간의 직관과 비슷하게 attention map이 나타나지만 레이어가 깊어질수록 극초반 토큰에 대부분의 attention score가 할당되는 것을 볼 수 있다.
 
 이는 softmax 연산의 특성 때문이라고 저자들은 말한다. Softmax 연산 특성상 attention weight들의 합이 반드시 1이 되어야 하는데 만약 높은 attention score가 나타나지 않는 경우 어쩔 수 없이 합 1을 맞추기 위해 초반 소수의 토큰에 sink에 버리듯 할당한다는 것이다.
@@ -34,7 +34,7 @@ Sliding Window Attention은 자연스러운 해결책처럼 보이지만 본 연
 저자들은 attention sink 토큰 몇 개 + 최근 토큰들의 rolling KV cache로 구성된 StreamingLLM을 제안한다.
 
 본 연구는 perplexity를 성능 지표로 주로 사용하는데 초기 4 토큰을 유지하는 것과 아닌 것에서 아래 그림과 같은 차이가 발생한다고 말한다.
-![](./model-architecture/transformer/figures/pasted-image-20260413002844.png)
+![](../figures/pasted-image-20260413002844.png)
 
 파인튜닝 없이도 sink token을 버리지 않는 것으로 모델들이 낮은 perplexity를 유지하는 것을 볼 수 있다. 저자들은 여기서 더 나아가 학습 상황부터 이를 염두에 두고 sink token을 샘플에 붙일 것을 제안한다. 모든 학습 데이터의 샘플 앞에 trainable placeholder sink token을 붙여 학습하면 초기 여러 토큰이 아니라 해당 sink token 하나만으로 안정성을 얻을 수 있다는 것이다.
 

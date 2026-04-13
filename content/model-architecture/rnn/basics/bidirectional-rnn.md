@@ -10,6 +10,6 @@ topSection: 'Model Architecture'
 ---
 
 
-![](./model-architecture/rnn/figures/pasted-image-20260326224515.png)
+![](../figures/pasted-image-20260326224515.png)
 
-![](./model-architecture/rnn/figures/pasted-image-20260326225010.png)
+![](../figures/pasted-image-20260326225010.png)

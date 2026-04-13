@@ -11,16 +11,16 @@ topSection: 'Model Architecture'
 
 
 이미지 캡셔닝
-![](./model-architecture/rnn/figures/pasted-image-20260325235451.png)
+![](../figures/pasted-image-20260325235451.png)
 
 
 스팸 메일 분류
-![](./model-architecture/rnn/figures/pasted-image-20260325235524.png)
+![](../figures/pasted-image-20260325235524.png)
 
 
 챗봇, 번역, 개체명 인식, 품사 태깅 등등
-![](./model-architecture/rnn/figures/pasted-image-20260325235747.png)
+![](../figures/pasted-image-20260325235747.png)
 
 
 크게 나누자면 RNN은 각 시점의 모든 은닉 상태를 리턴하는 형태와 최종 은닉 상태만을 리턴하는 형태로 구분할 수 있다.
-![](./model-architecture/rnn/figures/pasted-image-20260325235926.png)
+![](../figures/pasted-image-20260325235926.png)

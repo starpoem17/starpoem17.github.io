@@ -13,7 +13,7 @@ topSection: 'Model Architecture'
 함수 f가 다음과 같이 정의되는 경우 이를 Vanilla RNN(기본 순환 신경망 모델)이라고 한다.
 
 
-![](./model-architecture/rnn/figures/pasted-image-20260326173817.png)
+![](../figures/pasted-image-20260326173817.png)
 위와 같은 꼴로 표현되는 RNN을 Vanilla RNN이라고 한다.
 
 가중치 공유 효과

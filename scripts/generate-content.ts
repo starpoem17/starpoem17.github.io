@@ -31,6 +31,11 @@ type NoteEntry = {
   topSection: string
 }
 
+type AssetEntry = {
+  sourcePath: string
+  outputRelativePath: string
+}
+
 function toPosix(value: string): string {
   return value.split(path.sep).join(path.posix.sep)
 }
@@ -51,6 +56,15 @@ function ensureRelativeLink(targetPath: string): string {
   }
 
   return `./${targetPath}`
+}
+
+export function buildRelativeAssetLink(
+  noteOutputRelativePath: string,
+  assetOutputRelativePath: string,
+): string {
+  return ensureRelativeLink(
+    toPosix(path.posix.relative(path.posix.dirname(noteOutputRelativePath), assetOutputRelativePath)),
+  )
 }
 
 function formatDate(date: Date): string {
@@ -362,7 +376,8 @@ function buildNoteLookup(notes: NoteEntry[]) {
 
 function resolveAssetLink(
   rawTarget: string,
-  assetMap: Map<string, { sourcePath: string; outputRelativePath: string }>,
+  note: Pick<NoteEntry, "sourceRelativePath" | "outputRelativePath">,
+  assetMap: Map<string, AssetEntry>,
 ): string | null {
   if (
     rawTarget.startsWith("http://") ||
@@ -374,12 +389,50 @@ function resolveAssetLink(
 
   const [targetPath] = rawTarget.split(/[?#]/, 1)
   const assetName = path.basename(targetPath.trim())
-  const asset = assetMap.get(assetName)
-  if (!asset) {
-    return null
+  const directMatch = assetMap.get(assetName)
+  const outputMatches = directMatch
+    ? [directMatch]
+    : [...assetMap.values()].filter(
+        (asset) => path.posix.basename(asset.outputRelativePath) === assetName,
+      )
+
+  if (outputMatches.length > 1) {
+    throw new Error(`Ambiguous linked asset "${rawTarget}" in ${note.sourceRelativePath}`)
   }
 
-  return ensureRelativeLink(asset.outputRelativePath)
+  const asset = outputMatches[0]
+  if (!asset) {
+    throw new Error(`Missing linked asset "${rawTarget}" in ${note.sourceRelativePath}`)
+  }
+
+  return buildRelativeAssetLink(note.outputRelativePath, asset.outputRelativePath)
+}
+
+export function rewriteAssetLinks(
+  markdown: string,
+  note: Pick<NoteEntry, "sourceRelativePath" | "outputRelativePath">,
+  assetMap: Map<string, AssetEntry>,
+): string {
+  return markdown
+    .replace(/!\[\[([^\]]+)\]\]/g, (_match, rawTarget: string) => {
+      const [targetName] = rawTarget.split("|")
+      const assetName = path.basename(targetName.trim())
+      const asset = assetMap.get(assetName)
+      if (!asset) {
+        throw new Error(`Missing embedded asset "${assetName}" in ${note.sourceRelativePath}`)
+      }
+
+      const relativePath = buildRelativeAssetLink(note.outputRelativePath, asset.outputRelativePath)
+      return `![](${relativePath})`
+    })
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, altText: string, rawTarget: string) => {
+      const relativePath = resolveAssetLink(rawTarget, note, assetMap)
+      if (!relativePath) {
+        return match
+      }
+
+      return `![${altText}](${relativePath})`
+    })
 }
 
 function resolveWikiLinkTarget(
@@ -445,7 +498,7 @@ async function main(): Promise<void> {
     ASSET_EXTENSIONS.has(path.extname(filePath).toLowerCase()),
   )
 
-  const assetMap = new Map<string, { sourcePath: string; outputRelativePath: string }>()
+  const assetMap = new Map<string, AssetEntry>()
   for (const assetPath of assetFiles) {
     const basename = path.basename(assetPath)
     if (assetMap.has(basename)) {
@@ -492,26 +545,7 @@ async function main(): Promise<void> {
     )
     const outputPath = path.join(CONTENT_ROOT, note.outputRelativePath)
 
-    const transformedBody = markdownBody
-      .replace(/!\[\[([^\]]+)\]\]/g, (_match, rawTarget: string) => {
-        const [targetName] = rawTarget.split("|")
-        const assetName = path.basename(targetName.trim())
-        const asset = assetMap.get(assetName)
-        if (!asset) {
-          throw new Error(`Missing embedded asset "${assetName}" in ${note.sourceRelativePath}`)
-        }
-
-        const relativePath = ensureRelativeLink(asset.outputRelativePath)
-        return `![](${relativePath})`
-      })
-      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, altText: string, rawTarget: string) => {
-        const relativePath = resolveAssetLink(rawTarget, assetMap)
-        if (!relativePath) {
-          return match
-        }
-
-        return `![${altText}](${relativePath})`
-      })
+    const transformedBody = rewriteAssetLinks(markdownBody, note, assetMap)
       .replace(/(?<!!)\[\[([^\]]+)\]\]/g, (_match, rawTarget: string) => {
         const [targetPart, alias] = rawTarget.split("|")
         const linkedNote = resolveWikiLinkTarget(targetPart, note, noteLookup)

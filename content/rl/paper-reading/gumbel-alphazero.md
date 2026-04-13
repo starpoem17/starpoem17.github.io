@@ -42,5 +42,5 @@ $$
 
 # Sequential Halving(SH)
 
-![](./rl/figures/pasted-image-20260413011012.png)
+![](../figures/pasted-image-20260413011012.png)
 Alphazero의 PUCT는 트리 방문 횟수가 가장 많았던 수를 최종 수로 선택하지만 본 연구는 SH를 제시한다.
