@@ -28,7 +28,7 @@ export const PROFILE_LINKS = [
   { label: "Email", href: `mailto:${PROFILE.email}` },
   { label: "LinkedIn", href: PROFILE.linkedInUrl },
   { label: "GitHub", href: PROFILE.githubUrl },
-  { label: "CV", href: PROFILE.cvUrl },
+  { label: "CV", href: PROFILE.cvUrl, newTab: true },
 ] as const
 
 export const FOLDER_METADATA = [

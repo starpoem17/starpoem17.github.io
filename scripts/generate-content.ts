@@ -261,9 +261,10 @@ function buildRootIndex(): string {
   const focusAreas = PROFILE.focusAreas
     .map((area) => `          <span class="home-interest-pill">${area}</span>`)
     .join("\n")
-  const profileLinks = PROFILE_LINKS.map(
-    (link) => `        <a href="${link.href}" class="home-action-btn">${link.label}</a>`,
-  ).join("\n")
+  const profileLinks = PROFILE_LINKS.map((link) => {
+    const newTabAttributes = link.newTab ? ' target="_blank" rel="noopener noreferrer"' : ""
+    return `        <a href="${link.href}" class="home-action-btn"${newTabAttributes}>${link.label}</a>`
+  }).join("\n")
 
   return `---
 title: ${yamlString(PROFILE.name)}
