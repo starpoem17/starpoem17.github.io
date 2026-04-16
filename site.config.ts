@@ -21,7 +21,7 @@ export const PROFILE = {
   githubUrl: "https://github.com/starpoem17",
   linkedInUrl: "https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/",
   email: "coolkhj2003@hanyang.ac.kr",
-  cvUrl: "./static/main.pdf",
+  cvUrl: "./static/Hwajoong_Kim.pdf",
 } as const
 
 export const PROFILE_LINKS = [
