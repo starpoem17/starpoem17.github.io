@@ -27,8 +27,8 @@ cssclasses:
     </div>
     <div class="home-actions" aria-label="Contact links">
         <a href="mailto:coolkhj2003@hanyang.ac.kr" class="home-action-btn">Email</a>
-        <a href="https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/" class="home-action-btn">LinkedIn</a>
-        <a href="https://github.com/starpoem17" class="home-action-btn">GitHub</a>
+        <a href="https://www.linkedin.com/in/%ED%99%94%EC%A4%91-%EA%B9%80-687287400/" class="home-action-btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/starpoem17" class="home-action-btn" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="./static/Hwajoong_Kim.pdf" class="home-action-btn" target="_blank" rel="noopener noreferrer">CV</a>
     </div>
   </div>

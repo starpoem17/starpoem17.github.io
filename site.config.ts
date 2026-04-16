@@ -26,8 +26,8 @@ export const PROFILE = {
 
 export const PROFILE_LINKS = [
   { label: "Email", href: `mailto:${PROFILE.email}` },
-  { label: "LinkedIn", href: PROFILE.linkedInUrl },
-  { label: "GitHub", href: PROFILE.githubUrl },
+  { label: "LinkedIn", href: PROFILE.linkedInUrl, newTab: true },
+  { label: "GitHub", href: PROFILE.githubUrl, newTab: true },
   { label: "CV", href: PROFILE.cvUrl, newTab: true },
 ] as const
 
