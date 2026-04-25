@@ -63,7 +63,9 @@ export function buildRelativeAssetLink(
   assetOutputRelativePath: string,
 ): string {
   return ensureRelativeLink(
-    toPosix(path.posix.relative(path.posix.dirname(noteOutputRelativePath), assetOutputRelativePath)),
+    toPosix(
+      path.posix.relative(path.posix.dirname(noteOutputRelativePath), assetOutputRelativePath),
+    ),
   )
 }
 
@@ -199,7 +201,9 @@ export function assertNoBrokenMathHeadings(markdown: string, sourcePath: string)
     )
 
   if (brokenLine !== -1) {
-    throw new Error(`Unsupported math heading pattern remains in ${sourcePath} at line ${brokenLine + 1}`)
+    throw new Error(
+      `Unsupported math heading pattern remains in ${sourcePath} at line ${brokenLine + 1}`,
+    )
   }
 }
 
@@ -262,7 +266,8 @@ function buildRootIndex(): string {
     .map((area) => `          <span class="home-interest-pill">${area}</span>`)
     .join("\n")
   const profileLinks = PROFILE_LINKS.map((link) => {
-    const newTabAttributes = link.newTab ? ' target="_blank" rel="noopener noreferrer"' : ""
+    const newTabAttributes =
+      "newTab" in link && link.newTab ? ' target="_blank" rel="noopener noreferrer"' : ""
     return `        <a href="${link.href}" class="home-action-btn"${newTabAttributes}>${link.label}</a>`
   }).join("\n")
 
@@ -546,8 +551,9 @@ async function main(): Promise<void> {
     )
     const outputPath = path.join(CONTENT_ROOT, note.outputRelativePath)
 
-    const transformedBody = rewriteAssetLinks(markdownBody, note, assetMap)
-      .replace(/(?<!!)\[\[([^\]]+)\]\]/g, (_match, rawTarget: string) => {
+    const transformedBody = rewriteAssetLinks(markdownBody, note, assetMap).replace(
+      /(?<!!)\[\[([^\]]+)\]\]/g,
+      (_match, rawTarget: string) => {
         const [targetPart, alias] = rawTarget.split("|")
         const linkedNote = resolveWikiLinkTarget(targetPart, note, noteLookup)
         const { anchor } = parseWikiTarget(targetPart)
@@ -561,7 +567,8 @@ async function main(): Promise<void> {
         )
         const anchorSuffix = anchor ? `#${slugifyHeading(anchor)}` : ""
         return `[${alias ?? linkedNote.title}](${relativePath}${anchorSuffix})`
-      })
+      },
+    )
 
     assertNoBrokenMathHeadings(transformedBody, note.sourceRelativePath)
 
@@ -580,7 +587,8 @@ async function main(): Promise<void> {
   console.log(`Site title: ${SITE_TITLE}`)
 }
 
-const isEntrypoint = process.argv[1] != null && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+const isEntrypoint =
+  process.argv[1] != null && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 
 if (isEntrypoint) {
   main().catch((error) => {

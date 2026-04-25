@@ -21,6 +21,7 @@ import { getStaticResourcesFromPlugins } from "./plugins"
 import { randomIdNonSecure } from "./util/random"
 import { ChangeEvent } from "./plugins/types"
 import { minimatch } from "minimatch"
+import { GENERATED_CONTENT_PATH } from "../site.config"
 
 type ContentMap = Map<
   FilePath,
@@ -40,6 +41,18 @@ type BuildData = {
   contentMap: ContentMap
   changesSinceLastBuild: Record<FilePath, ChangeEvent["type"]>
   lastBuildMs: number
+}
+
+function isGeneratedContentDirectory(directory: string): boolean {
+  const generatedContentRoot = path.resolve(GENERATED_CONTENT_PATH)
+  const resolvedDirectory = path.resolve(directory)
+  const relativeToGeneratedContent = path.relative(generatedContentRoot, resolvedDirectory)
+  return (
+    relativeToGeneratedContent === "" ||
+    (relativeToGeneratedContent !== "" &&
+      !relativeToGeneratedContent.startsWith("..") &&
+      !path.isAbsolute(relativeToGeneratedContent))
+  )
 }
 
 async function buildQuartz(argv: Argv, mut: Mutex, clientRefresh: () => void) {
@@ -121,6 +134,7 @@ async function startWatching(
   }
 
   const gitIgnoredMatcher = await isGitIgnored()
+  const shouldHonorGitIgnore = !isGeneratedContentDirectory(argv.directory)
   const buildData: BuildData = {
     ctx,
     mut,
@@ -128,7 +142,7 @@ async function startWatching(
     ignored: (fp) => {
       const pathStr = toPosixPath(fp.toString())
       if (pathStr.startsWith(".git/")) return true
-      if (gitIgnoredMatcher(pathStr)) return true
+      if (shouldHonorGitIgnore && gitIgnoredMatcher(pathStr)) return true
       for (const pattern of cfg.configuration.ignorePatterns) {
         if (minimatch(pathStr, pattern)) {
           return true
