@@ -34,7 +34,7 @@ q\!\left(
 \arg\max_{a \in A_{\mathrm{top}\, n}} g(a) + \mathrm{logits}(a)
 \right)
 $$
-논문의 7번 수식.  $\sigma(q(a))$가 양 변의 유일한 차이점이다. 논문 저자들은 Sequential Halving 과정을 통해 q(a)가 커질수록 유리해지는 단조증가함수 $\sigma(q(a))$를 통해 더 높은 Q-value를 리턴하는 행동 a에 가산점을 줄 수 있으며 이를 통해 적어도 policy network보다 못한 선택은 하지 않게 된다고 설명한다.
+논문의 7번 수식.  $\sigma(q(a))$가 양 변의 유일한 차이점이다. 논문 저자들은 Sequential Halving 과정에서 q(a)가 커질수록 유리해지는 단조증가함수 $\sigma(q(a))$를 통해 더 높은 Q-value를 리턴하는 행동 a에 가산점을 줄 수 있으며 이를 통해 적어도 policy network보다 못한 선택은 하지 않게 된다고 설명한다.
 
 ## Gumbel-max trick
 

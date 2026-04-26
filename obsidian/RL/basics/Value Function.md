@@ -5,8 +5,10 @@
 # Return
 
 Return이란 앞으로 받을 누적 보상을 말한다.
+
+시점 t에서부터의 return을 $G_t$라고 일반적으로 표기한다.
 ## $$
-G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} \, ...
+G_t = R_{t} + \gamma R_{t+1} + \gamma^2 R_{t+2} \, ...
 $$
 $R_{t+1}$ : 지금 행동하고 받는 즉시 보상
 그 뒤는 $[0,1]$의 범위를 갖는 상수 discount factor $\gamma$ 가 적용된 미래의 보상들
