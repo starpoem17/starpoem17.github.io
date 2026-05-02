@@ -1,4 +1,5 @@
 import { promises as fs } from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import {
@@ -32,9 +33,30 @@ type NoteEntry = {
 }
 
 type AssetEntry = {
-  sourcePath: string
+  sourceRelativePath?: string
+  sourcePath?: string
   outputRelativePath: string
 }
+
+export type VaultInput = {
+  sourceRoot: string
+  contentRoot: string
+  cleanupRoot?: string
+  sourceFiles: string[]
+  readSourceText(sourceRelativePath: string): Promise<string>
+  getSourceMtime(sourceRelativePath: string): Promise<Date>
+}
+
+export type GeneratedContentPlan = {
+  sourceRoot: string
+  contentRoot: string
+  cleanupRoot: string
+  files: GeneratedContentEntry[]
+}
+
+export type GeneratedContentEntry =
+  | { kind: "text"; outputRelativePath: string; contents: string }
+  | { kind: "copy"; sourceRelativePath: string; outputRelativePath: string }
 
 function toPosix(value: string): string {
   return value.split(path.sep).join(path.posix.sep)
@@ -490,11 +512,80 @@ function folderAncestors(folderPath: string): string[] {
   return result
 }
 
-async function main(): Promise<void> {
+function assertPlanRelativePath(value: string, label: string): string {
+  if (value.includes("\\") || value === "" || path.posix.isAbsolute(value)) {
+    throw new Error(`${label} must be a POSIX-style relative path: ${value}`)
+  }
+
+  const normalized = path.posix.normalize(value)
+  if (normalized === "." || normalized === ".." || normalized.startsWith("../")) {
+    throw new Error(`${label} must not escape its root: ${value}`)
+  }
+
+  return normalized
+}
+
+function validateGeneratedContentPlan(plan: GeneratedContentPlan): void {
+  for (const [label, root] of [
+    ["sourceRoot", plan.sourceRoot],
+    ["contentRoot", plan.contentRoot],
+    ["cleanupRoot", plan.cleanupRoot],
+  ] as const) {
+    if (!path.isAbsolute(root)) {
+      throw new Error(`${label} must be an absolute path`)
+    }
+  }
+
+  if (plan.cleanupRoot !== plan.contentRoot) {
+    throw new Error("cleanupRoot must equal contentRoot")
+  }
+
+  const filesystemRoot = path.parse(plan.cleanupRoot).root
+  const homeDirectory = os.homedir()
+  if (
+    plan.cleanupRoot === "" ||
+    plan.cleanupRoot === plan.sourceRoot ||
+    plan.cleanupRoot === homeDirectory ||
+    plan.cleanupRoot === filesystemRoot
+  ) {
+    throw new Error(`Refusing unsafe cleanupRoot: ${plan.cleanupRoot}`)
+  }
+
+  const outputPaths = new Set<string>()
+  for (const entry of plan.files) {
+    const outputRelativePath = assertPlanRelativePath(
+      entry.outputRelativePath,
+      "outputRelativePath",
+    )
+    if (outputPaths.has(outputRelativePath)) {
+      throw new Error(`Duplicate output path in generated content plan: ${outputRelativePath}`)
+    }
+    outputPaths.add(outputRelativePath)
+
+    if (entry.kind === "copy") {
+      assertPlanRelativePath(entry.sourceRelativePath, "sourceRelativePath")
+    }
+  }
+}
+
+async function buildFileSystemVaultInput(): Promise<VaultInput> {
   const allSourceFiles = await listFiles(SOURCE_ROOT)
+  return {
+    sourceRoot: SOURCE_ROOT,
+    contentRoot: CONTENT_ROOT,
+    cleanupRoot: CONTENT_ROOT,
+    sourceFiles: allSourceFiles.map((filePath) => toPosix(path.relative(SOURCE_ROOT, filePath))),
+    readSourceText: (sourceRelativePath) =>
+      fs.readFile(path.join(SOURCE_ROOT, sourceRelativePath), "utf8"),
+    getSourceMtime: async (sourceRelativePath) =>
+      (await fs.stat(path.join(SOURCE_ROOT, sourceRelativePath))).mtime,
+  }
+}
+
+export async function buildGeneratedContentPlan(input: VaultInput): Promise<GeneratedContentPlan> {
+  const allSourceFiles = input.sourceFiles.map(toPosix).sort()
   const sourceMarkdownFiles = allSourceFiles
     .filter((filePath) => MARKDOWN_EXTENSIONS.has(path.extname(filePath).toLowerCase()))
-    .map((filePath) => toPosix(path.relative(SOURCE_ROOT, filePath)))
     .sort()
 
   const noteEntries = buildNoteEntries(sourceMarkdownFiles)
@@ -511,9 +602,9 @@ async function main(): Promise<void> {
       throw new Error(`Duplicate asset basename detected: ${basename}`)
     }
 
-    const sourceRelativePath = toPosix(path.relative(SOURCE_ROOT, assetPath))
+    const sourceRelativePath = toPosix(assetPath)
     assetMap.set(basename, {
-      sourcePath: assetPath,
+      sourceRelativePath,
       outputRelativePath: assetSourcePathToOutputRelativePath(sourceRelativePath),
     })
   }
@@ -525,31 +616,46 @@ async function main(): Promise<void> {
     }
   }
 
-  await fs.rm(CONTENT_ROOT, { recursive: true, force: true })
-  await writeTextFile(path.join(CONTENT_ROOT, "index.md"), buildRootIndex())
+  const files: GeneratedContentEntry[] = [
+    { kind: "text", outputRelativePath: "index.md", contents: buildRootIndex() },
+  ]
 
   for (const folderPath of Array.from(folderSet).sort((a, b) => a.localeCompare(b))) {
     if (folderPath === "") {
       continue
     }
 
-    const outputPath = path.join(CONTENT_ROOT, sourceFolderToSlug(folderPath), "index.md")
+    const outputRelativePath = path.posix.join(sourceFolderToSlug(folderPath), "index.md")
     const description = folderMetadata.get(folderPath)?.description
-    await writeTextFile(outputPath, buildFolderIndex(folderPath, description))
+    files.push({
+      kind: "text",
+      outputRelativePath,
+      contents: buildFolderIndex(folderPath, description),
+    })
   }
 
-  for (const asset of assetMap.values()) {
-    await copyFile(asset.sourcePath, path.join(CONTENT_ROOT, asset.outputRelativePath))
+  for (const asset of Array.from(assetMap.values()).sort((a, b) =>
+    a.outputRelativePath.localeCompare(b.outputRelativePath),
+  )) {
+    if (!asset.sourceRelativePath) {
+      throw new Error(`Missing source path for generated asset: ${asset.outputRelativePath}`)
+    }
+
+    files.push({
+      kind: "copy",
+      sourceRelativePath: asset.sourceRelativePath,
+      outputRelativePath: asset.outputRelativePath,
+    })
   }
 
-  for (const note of noteEntries) {
-    const sourcePath = path.join(SOURCE_ROOT, note.sourceRelativePath)
-    const rawMarkdown = await fs.readFile(sourcePath, "utf8")
+  for (const note of noteEntries.sort((a, b) =>
+    a.sourceRelativePath.localeCompare(b.sourceRelativePath),
+  )) {
+    const rawMarkdown = await input.readSourceText(note.sourceRelativePath)
     const markdownBody = normalizeBrokenMathHeadings(
       stripLeadingFrontmatter(rawMarkdown),
       note.sourceRelativePath,
     )
-    const outputPath = path.join(CONTENT_ROOT, note.outputRelativePath)
 
     const transformedBody = rewriteAssetLinks(markdownBody, note, assetMap).replace(
       /(?<!!)\[\[([^\]]+)\]\]/g,
@@ -559,9 +665,9 @@ async function main(): Promise<void> {
         const { anchor } = parseWikiTarget(targetPart)
         const relativePath = ensureRelativeLink(
           toPosix(
-            path.relative(
-              path.dirname(outputPath),
-              path.join(CONTENT_ROOT, linkedNote.outputRelativePath),
+            path.posix.relative(
+              path.posix.dirname(note.outputRelativePath),
+              linkedNote.outputRelativePath,
             ),
           ),
         )
@@ -572,18 +678,61 @@ async function main(): Promise<void> {
 
     assertNoBrokenMathHeadings(transformedBody, note.sourceRelativePath)
 
-    const sourceStat = await fs.stat(sourcePath)
+    const sourceMtime = await input.getSourceMtime(note.sourceRelativePath)
     const frontmatter = buildFrontmatter(
       note,
       extractDescription(markdownBody),
-      formatDate(sourceStat.mtime),
+      formatDate(sourceMtime),
     )
-    await writeTextFile(outputPath, `${frontmatter}${transformedBody.trimEnd()}\n`)
+    files.push({
+      kind: "text",
+      outputRelativePath: note.outputRelativePath,
+      contents: `${frontmatter}${transformedBody.trimEnd()}\n`,
+    })
   }
 
-  console.log(
-    `Generated ${noteEntries.length} notes into ${path.relative(process.cwd(), CONTENT_ROOT)}`,
-  )
+  return {
+    sourceRoot: input.sourceRoot,
+    contentRoot: input.contentRoot,
+    cleanupRoot: input.cleanupRoot ?? input.contentRoot,
+    files,
+  }
+}
+
+export async function writeGeneratedContentPlan(plan: GeneratedContentPlan): Promise<void> {
+  validateGeneratedContentPlan(plan)
+
+  await fs.rm(plan.cleanupRoot, { recursive: true, force: true })
+  for (const entry of plan.files) {
+    const outputRelativePath = assertPlanRelativePath(
+      entry.outputRelativePath,
+      "outputRelativePath",
+    )
+    const outputPath = path.join(plan.contentRoot, outputRelativePath)
+    if (entry.kind === "text") {
+      await writeTextFile(outputPath, entry.contents)
+      continue
+    }
+
+    const sourceRelativePath = assertPlanRelativePath(
+      entry.sourceRelativePath,
+      "sourceRelativePath",
+    )
+    await copyFile(path.join(plan.sourceRoot, sourceRelativePath), outputPath)
+  }
+}
+
+async function main(): Promise<void> {
+  const input = await buildFileSystemVaultInput()
+  const plan = await buildGeneratedContentPlan(input)
+  await writeGeneratedContentPlan(plan)
+  const noteCount = plan.files.filter(
+    (entry) =>
+      entry.kind === "text" &&
+      entry.outputRelativePath !== "index.md" &&
+      !entry.outputRelativePath.endsWith("/index.md"),
+  ).length
+  console.log(`Generated ${noteCount} notes into ${path.relative(process.cwd(), CONTENT_ROOT)}`)
   console.log(`Site title: ${SITE_TITLE}`)
 }
 
