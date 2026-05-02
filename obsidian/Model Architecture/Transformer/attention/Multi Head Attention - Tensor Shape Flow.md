@@ -65,7 +65,7 @@ transpose, concat으로 원상복구. (B, n_head, curr_len, n_dim) -> (B, curr_l
 
 W_O = nn.Linear(dim, embed_dim) 통과시키면 (B, curr_len, embed_dim)
 
-
+---
 
 추론 상황은 크게 두 가지로 나뉨 prefill -> decode
 
