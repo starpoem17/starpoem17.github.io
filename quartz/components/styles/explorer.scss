@@ -20,7 +20,6 @@
       padding: 1rem 0 1rem 0;
       margin: 0;
     }
-
   }
 }
 
@@ -135,10 +134,19 @@ button.mobile-explorer,
       overscroll-behavior: contain;
     }
 
-    & li > a {
+    & li > a.file-link {
       color: var(--dark);
+      column-gap: 0.15rem;
+      display: grid;
+      grid-template-columns: 0.55rem minmax(0, 1fr);
       opacity: 0.75;
       pointer-events: all;
+
+      &::before {
+        color: var(--gray);
+        content: "•";
+        opacity: 0.65;
+      }
 
       &.active {
         opacity: 1;

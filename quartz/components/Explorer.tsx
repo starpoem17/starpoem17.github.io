@@ -134,7 +134,7 @@ export default ((userOpts?: Partial<Options>) => {
         </div>
         <template id="template-file">
           <li>
-            <a href="#"></a>
+            <a href="#" class="file-link"></a>
           </li>
         </template>
         <template id="template-folder">

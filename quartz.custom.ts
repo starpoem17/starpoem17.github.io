@@ -113,12 +113,20 @@ const explorerMapFnSource = `(node) => {
     return
   }
 
+  const countLeafNotes = (target) => {
+    if (!target.isFolder) {
+      return 1
+    }
+
+    return (target.children ?? []).reduce((count, child) => count + countLeafNotes(child), 0)
+  }
+
   const baseName = (node.displayName ?? "").replace(/\\s+\\(\\d+\\)$/, "").trim()
   if (baseName.length === 0) {
     return
   }
 
-  node.displayName = \`\${baseName} (\${node.children.length})\`
+  node.displayName = \`\${baseName} (\${countLeafNotes(node)})\`
 }`
 
 export const explorerFilterFn = new Function(
