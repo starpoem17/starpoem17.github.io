@@ -244,6 +244,8 @@ Wx
 \sum_i \sigma_i(v_i^\top x)u_i
 $$
 
+## 딥러닝 응용
+
 만약 $\sigma_i$가 엄청 작다면 해당 singular value와 대응되는 singular direction들은 선형 변환에 크게 기여하지 않는다고 볼 수 있다. 기존 singular value들 중 가장 큰 상위 k개만 남겨서 행렬 크기를 줄일 수 있다. 이를 rank-k approximation이라고 한다. 이러한 근사를 통해 연산 효율을 높일 수 있다.
 
 Rank-k approx를 수식으로 표현하면 다음과 같다.
