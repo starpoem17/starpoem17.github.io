@@ -20,7 +20,7 @@ Tiers A–F are planned but have no code (out of scope as of 2026-11-12).
 
 ## Open questions
 
-- `rainbow-rare` foil look on the S tier card borders: the user chose it (rainbow 80% + glitter) from screenshots but has not tried it in a browser. See [holo-card.md](holo-card.md#effect-layers).
+- `rainbow-rare` foil look on the S tier card borders: the user chose it from screenshots and set the rainbow to 60%; not yet reviewed in a browser. See [holo-card.md](holo-card.md#effect-layers).
 - Card entrance animation in frame 9 is not specified in Figma; the agent chose a staggered rise and fade-in. See [s-tier-section.md](s-tier-section.md#timeline).
 - Frames 5–6 interpretation: " Tier" is wiped out right → left and "S" stays white; Figma frame 5 shows a white → black gradient over "S Tier". See [s-tier-section.md](s-tier-section.md#timeline).
 - Phone-gyroscope tilt (offered by poke-holo) is not implemented; it needs an iOS permission prompt. Ask the user whether it is wanted.

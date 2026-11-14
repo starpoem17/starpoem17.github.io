@@ -281,7 +281,7 @@
       calc(100% - var(--pointer-x)) calc(100% - var(--pointer-y));
     background-blend-mode: soft-light;
     mix-blend-mode: screen;
-    opacity: calc(var(--card-opacity) * 0.8);
+    opacity: calc(var(--card-opacity) * 0.6);
   }
   /* Glitter: a tiling sparkle texture (public/images/foil/glitter.png, black = neutral), lit by a
      radial light at the pointer and shifted slightly with it, screened onto the card. */
