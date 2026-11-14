@@ -15,7 +15,7 @@ Updated to the user's 2026-11-14 Figma revision (new background, 5 collage cards
 
 ## Data
 
-`cards` holds 5 entries in screen order; each renders a [holo card](holo-card.md). `cardFoil` (`"v"`) and `cardFoilMask` (`/images/slam-dunk/foil-mask.svg`) apply to all 5 cards. `name` is the accessible label, taken from the Figma group names ("채치수 카드", "정대만 카드", "강백호 카드", "송태섭 카드", "서태웅 카드").
+`cards` holds 5 entries in screen order; each renders a [holo card](holo-card.md). `cardFoil` (`"rainbow-rare"`) and `cardFoilMask` (`/images/slam-dunk/foil-mask.svg`) apply to all 5 cards. `name` is the accessible label, taken from the Figma group names ("채치수 카드", "정대만 카드", "강백호 카드", "송태섭 카드", "서태웅 카드").
 
 The user's original image files are in `images/s_tier/slamdunk/` (16 files: 15 screenshots of 3420×2224 px, 1 JPEG of 1472×980 px). On 2026-11-14 every image used in Figma frames 1–9 matched one of these files by SHA-1 (Figma's image hash), and every file is used. Evidence: `tmp/20261114_215500_figma-rest-image-check/` (`file.json`, `local.sha1`).
 

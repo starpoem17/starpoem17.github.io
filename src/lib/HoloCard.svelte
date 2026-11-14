@@ -1,6 +1,7 @@
 <script>
   // Holographic card: tilts toward the pointer, glare follows the pointer, foil shine shifts with it.
-  // `foil` picks the foil effect: 'rainbow' (rainbow over the whole card) or 'v' (Pokemon V style foil).
+  // `foil` picks the foil effect: 'rainbow' (rainbow over the whole card), 'v' (Pokemon V style foil)
+  // or 'rainbow-rare' (Pokemon Rainbow Rare style: broad rainbow and glitter).
   // `foilMask` (image URL) limits the foil and its glare to the mask's opaque area; the rest gets a soft glare.
   // `active` moves the card to the screen center and enlarges it; the parent owns that state.
   import { Spring } from 'svelte/motion';
@@ -100,6 +101,7 @@
       <img class="art" src={image} alt={name} />
       {#if foilMask}<div class="soft-glare"></div>{/if}
       <div class="shine {foil}"></div>
+      {#if foil === 'rainbow-rare'}<div class="sparkle"></div>{/if}
       <div class="glare {foil}"></div>
     </div>
   </button>
@@ -141,6 +143,7 @@
   .art,
   .soft-glare,
   .shine,
+  .sparkle,
   .glare {
     position: absolute;
     inset: 0;
@@ -150,6 +153,7 @@
 
   /* Each blended layer is masked itself: a masked wrapper would isolate the layers from the art. */
   .shine,
+  .sparkle,
   .glare {
     mask-image: var(--foil-mask, none);
     mask-size: 100% 100%;
@@ -262,8 +266,46 @@
     filter: contrast(2.5) saturate(1.5);
     mix-blend-mode: soft-light;
   }
+  /* Pokemon Rainbow Rare style foil: two broad rainbow gradients at -30 and -60 degrees moving in
+     opposite directions with the pointer. Screened like the 'v' foil, so it adds colored light even
+     on the pure red border. */
+  .shine.rainbow-rare {
+    --rr-stops: hsl(0 90% 55%), hsl(40 95% 55%), hsl(90 80% 50%), hsl(180 80% 50%), hsl(220 85% 60%),
+      hsl(280 80% 60%), hsl(330 85% 58%);
+    background-image:
+      linear-gradient(-30deg, var(--rr-stops), var(--rr-stops), var(--rr-stops), hsl(0 90% 55%)),
+      linear-gradient(-60deg, var(--rr-stops), var(--rr-stops), var(--rr-stops), hsl(0 90% 55%));
+    background-size: 400% 400%;
+    background-position:
+      var(--pointer-x) var(--pointer-y),
+      calc(100% - var(--pointer-x)) calc(100% - var(--pointer-y));
+    background-blend-mode: soft-light;
+    mix-blend-mode: screen;
+    opacity: calc(var(--card-opacity) * 0.8);
+  }
+  /* Glitter: a tiling sparkle texture (public/images/foil/glitter.png, black = neutral), lit by a
+     radial light at the pointer and shifted slightly with it, screened onto the card. */
+  .sparkle {
+    background-image:
+      radial-gradient(
+        farthest-corner circle at var(--pointer-x) var(--pointer-y),
+        hsl(0 0% 100%) 0%,
+        hsl(0 0% 60%) 25%,
+        hsl(0 0% 15%) 60%
+      ),
+      url('/images/foil/glitter.png');
+    background-size: 100% 100%, calc(160 * var(--u)) calc(160 * var(--u));
+    background-position:
+      center,
+      calc(var(--shine-x) * 0.3) calc(var(--shine-y) * 0.3);
+    background-blend-mode: multiply;
+    mix-blend-mode: screen;
+    opacity: var(--card-opacity);
+  }
+
   /* Bright spot at the pointer, darker away from it; hard-light so it shows on the red border. */
-  .glare.v {
+  .glare.v,
+  .glare.rainbow-rare {
     background: radial-gradient(
       farthest-corner circle at var(--pointer-x) var(--pointer-y),
       hsl(0 0% 100%) 0%,

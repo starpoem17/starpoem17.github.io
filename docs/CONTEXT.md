@@ -7,7 +7,7 @@
 | Work | One manga title. A–F tiers list several works per tier. |
 | S tier card | One of the 5 cards in the S tier row, each named after a SLAM DUNK character (채치수, 정대만, 강백호, 송태섭, 서태웅). Design details: [architecture/s-tier-section.md](architecture/s-tier-section.md#design-source). |
 | Work card | A card showing one work. Used by A–F tiers (not implemented). |
-| Foil | The moving holographic layer of a holo card. Two kinds: `rainbow` and `v` (Pokemon V style). Details: [architecture/holo-card.md](architecture/holo-card.md#effect-layers). |
+| Foil | The moving holographic layer of a holo card. Three kinds: `rainbow`, `v` (Pokemon V style) and `rainbow-rare` (Pokemon Rainbow Rare style, with glitter). Details: [architecture/holo-card.md](architecture/holo-card.md#effect-layers). |
 | Foil mask | An image whose opaque area limits a card's foil; the S tier cards use `public/images/slam-dunk/foil-mask.svg` (border and red bars). |
 | Soft glare | The faint light spot drawn outside the foil mask (on the manga panels). |
 | Holo card | The interactive card Module (`src/lib/HoloCard.svelte`): pointer tilt, glare, holographic shine, click-to-enlarge. |
