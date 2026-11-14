@@ -1,0 +1,11 @@
+:root {
+  /* 1 Figma pixel of the 1920x1080 frame, scaled to fit the viewport */
+  --u: min(100vw / 1920, 100vh / 1080);
+}
+
+html,
+body {
+  margin: 0;
+  background: #000;
+  color: #fff;
+}

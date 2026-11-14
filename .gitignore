@@ -1,0 +1,7 @@
+node_modules/
+dist/
+output/
+# Task-isolated temporary work (screenshots, Chrome profiles); kept locally, see AGENTS.md section 6.
+tmp/
+# Figma REST API token
+.env

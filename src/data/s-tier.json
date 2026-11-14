@@ -1,0 +1,14 @@
+{
+  "tier": "S",
+  "title": "SLAM DUNK",
+  "background": "/images/slam-dunk/background.jpg",
+  "cardFoil": "v",
+  "cardFoilMask": "/images/slam-dunk/foil-mask.svg",
+  "cards": [
+    { "name": "채치수 카드", "image": "/images/slam-dunk/card-1.webp" },
+    { "name": "정대만 카드", "image": "/images/slam-dunk/card-2.webp" },
+    { "name": "강백호 카드", "image": "/images/slam-dunk/card-3.webp" },
+    { "name": "송태섭 카드", "image": "/images/slam-dunk/card-4.webp" },
+    { "name": "서태웅 카드", "image": "/images/slam-dunk/card-5.webp" }
+  ]
+}

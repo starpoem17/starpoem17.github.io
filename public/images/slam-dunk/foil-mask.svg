@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 450">
+  <!-- Foil area of the S tier cards (card render 330x450 = 310x430 card + 10px border):
+       border ring with rounded outer corners, and the two red corner bars (one card sits 1px left, hence 33 wide). -->
+  <path fill-rule="evenodd" d="M10 0H320A10 10 0 0 1 330 10V440A10 10 0 0 1 320 450H10A10 10 0 0 1 0 440V10A10 10 0 0 1 10 0ZM10 10V440H320V10Z"/>
+  <rect x="5" y="5" width="33" height="178" rx="5"/>
+  <rect x="293" y="267" width="33" height="178" rx="5"/>
+</svg>
