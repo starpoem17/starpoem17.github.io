@@ -13,13 +13,15 @@ Single static page built with Vite + Svelte 5 + GSAP ([ADR 0001](../adr/0001-vit
 
 Tiers A–F are planned but have no code (out of scope as of 2026-11-12).
 
-## Deployment (not yet performed)
+## Deployment
 
-- Ubuntu server: `npm ci && npm run build`, then serve `dist/` with nginx as static files.
-- Render: Static Site, build command `npm ci && npm run build`, publish directory `dist`.
+GitHub Pages user site `https://starpoem17.github.io/`, repository `starpoem17/starpoem17.github.io` ([ADR 0002](../adr/0002-github-pages.md)). `.github/workflows/deploy.yml` runs on every push to `main`: `npm ci`, `npm run build`, then deploys `dist/`. The page is the S tier section only; the planned CV main page and menu have no code.
+
+Verification: 2026-11-15, a fresh clone of this repository with the workflow added passed `npm ci` and `npm run build` (local Node 24; the workflow uses Node 22), and `vite preview` returned 200 for `/`, the JS and CSS bundles, `background.jpg`, `card-3.webp`, `foil-mask.svg` and `glitter.png`. The first GitHub Actions deployment is not yet verified.
 
 ## Open questions
 
+- CV main page: design not decided by the user; until then the main page starts the tier page directly and there is no menu. See [ADR 0002](../adr/0002-github-pages.md).
 - `rainbow-rare` foil look on the S tier card borders: the user chose it from screenshots and set the rainbow to 60%; not yet reviewed in a browser. See [holo-card.md](holo-card.md#effect-layers).
 - Card entrance animation in frame 9 is not specified in Figma; the agent chose a staggered rise and fade-in. See [s-tier-section.md](s-tier-section.md#timeline).
 - Frames 5–6 interpretation: " Tier" is wiped out right → left and "S" stays white; Figma frame 5 shows a white → black gradient over "S Tier". See [s-tier-section.md](s-tier-section.md#timeline).
@@ -29,6 +31,7 @@ Tiers A–F are planned but have no code (out of scope as of 2026-11-12).
 
 ## History
 
+- 2026-11-15: the planned deployment target changed from nginx on the user's Ubuntu server or a Render Static Site (never performed) to GitHub Pages. See [ADR 0002](../adr/0002-github-pages.md).
 - 2026-11-15: the open question on the `v` foil look became moot: the user replaced the `v` foil on the S tier borders with `rainbow-rare` (rainbow + glitter) to make the red border less flat. See [holo-card.md](holo-card.md#effect-layers).
 - 2026-11-14: the open question on the rainbow shine strength (`opacity × 0.55`, not reviewed) became moot for the S tier: the user replaced the rainbow foil on these cards with the `v` foil because it hid the manga and left the red border flat. See [holo-card.md](holo-card.md#effect-layers).
 - 2026-11-14: the open question "frames 1–2 'Tier List' position" (page 33px and 18px lower than Figma, Figma moving it 15px between frames 1 and 2) was settled by the user's Figma edit, which put frames 1, 2, 4 and 5 on the title line; frames 1–2 now match the page. The page's frames 4–5 were changed to the new position the same day. See [s-tier-section.md](s-tier-section.md#history).

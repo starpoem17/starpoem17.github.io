@@ -2,6 +2,8 @@
 
 | Term | Definition |
 |---|---|
+| CV main page | The planned main page of `starpoem17.github.io`: the user's CV with a Notion link and a small menu button that opens the tier page. Not designed yet. |
+| Tier page | The manga tier list page (currently the S tier section only). Until the CV main page exists, it is the main page. |
 | Tier | A rank level. The project uses S, A, B, C, D, E, F (S highest). |
 | S tier section | The pinned, scroll-scrubbed sequence for the S tier (SLAM DUNK). Built from Figma frames 1–9. |
 | Work | One manga title. A–F tiers list several works per tier. |
