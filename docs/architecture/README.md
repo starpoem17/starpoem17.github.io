@@ -17,7 +17,7 @@ Tiers A–F are planned but have no code (out of scope as of 2026-11-12).
 
 GitHub Pages user site `https://starpoem17.github.io/`, repository `starpoem17/starpoem17.github.io` ([ADR 0002](../adr/0002-github-pages.md)). `.github/workflows/deploy.yml` runs on every push to `main`: `npm ci`, `npm run build`, then deploys `dist/`. The page is the S tier section only; the planned CV main page and menu have no code.
 
-Verification: 2026-11-15, a fresh clone of this repository with the workflow added passed `npm ci` and `npm run build` (local Node 24; the workflow uses Node 22), and `vite preview` returned 200 for `/`, the JS and CSS bundles, `background.jpg`, `card-3.webp`, `foil-mask.svg` and `glitter.png`. The first GitHub Actions deployment is not yet verified.
+Verification: 2026-11-15, a fresh clone of this repository with the workflow added passed `npm ci` and `npm run build` (local Node 24; the workflow uses Node 22), and `vite preview` returned 200 for `/`, the JS and CSS bundles, `background.jpg`, `card-3.webp`, `foil-mask.svg` and `glitter.png`. Commit 6a7d3b1 was then deployed by GitHub Actions run 43690071364 (build and deploy succeeded); `https://starpoem17.github.io/` served the new `index.html`, whose bundles and the four image paths above returned 200, and a headless Chrome screenshot at 1920×1080 showed Figma frame 1 ("Tier List" in Knewave on black): `tmp/20261115_162900_pages-deploy-check/live-top.png`. The scroll sequence was not checked on the live site.
 
 ## Open questions
 
